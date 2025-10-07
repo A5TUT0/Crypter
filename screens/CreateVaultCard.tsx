@@ -19,7 +19,7 @@ export default function CreateVaultCard(props: any) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [website, setWebsite] = useState("");
-
+  const [favorite, setFavorite] = useState(false);
   async function saveEntry() {
     try {
       const existing = await AsyncStorage.getItem("vault_entries");
@@ -30,6 +30,7 @@ export default function CreateVaultCard(props: any) {
         username,
         password,
         website,
+        favorite,
       };
       arr.push(newEntry);
       await AsyncStorage.setItem("vault_entries", JSON.stringify(arr));
@@ -67,6 +68,19 @@ export default function CreateVaultCard(props: any) {
           value={website}
           onChangeText={setWebsite}
         />
+        <Pressable
+          onPress={() => setFavorite(!favorite)}
+          style={{ flexDirection: "row", alignItems: "center", padding: 20 }}
+        >
+          <Ionicons
+            name={favorite ? "star" : "star-outline"}
+            size={24}
+            color={favorite ? "#e1a17b" : "#666"}
+          />
+          <Text style={{ marginLeft: 10, fontSize: 16, color: "#333" }}>
+            {favorite ? "Unmark Favorite" : "Mark as Favorite"}
+          </Text>
+        </Pressable>
       </View>
       <View style={{ padding: 20 }}>
         <Pressable
