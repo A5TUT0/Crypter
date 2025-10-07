@@ -2,20 +2,24 @@ import { Pressable, Image, Text, View } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export function VaultCard({
-  key,
+  id,
   title,
   user,
   logo,
+  onPress,
 }: {
-  key: any;
+  id?: string;
   title: string;
   user: string;
   logo: any;
+  onPress?: () => void;
 }) {
   return (
-    <View id={key}>
+    <View>
       <Pressable
-        onPressIn={() => {}}
+        onPressIn={() => {
+          onPress && onPress();
+        }}
         style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1.0 }]}
       >
         <View
