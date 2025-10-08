@@ -10,7 +10,6 @@ export type Entry = {
   favorite?: boolean;
 };
 
-// Custom hook to load vault entries. Hooks must be called from React components or other hooks.
 export function useVaultEntries() {
   const [entries, setEntries] = useState<Entry[]>([]);
 

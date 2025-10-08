@@ -5,7 +5,6 @@ import Title from "../components/ui/Title";
 import { VaultCard } from "../components/VaultCard";
 import CreateVaultCardButton from "../components/CreateVaultCardButton";
 import { useVaultEntries, Entry } from "../hooks/AsyncStorage";
-
 export default function Vault(props: any) {
   const { navigation } = props;
   const entries = useVaultEntries();
@@ -22,7 +21,7 @@ export default function Vault(props: any) {
       >
         <Title title="Vault"></Title>
       </View>
-      <ScrollView style={{ height: "80%" }}>
+      <ScrollView style={{ height: "80%", marginBottom: 100 }}>
         {entries.map((entry: Entry) => (
           <VaultCard
             key={entry.id}

@@ -11,7 +11,7 @@ import { useTheme } from "../contexts/ThemeContext";
 import Title from "../components/ui/Title";
 import { Input, InputPassword } from "../components/ui/Input";
 import { useState } from "react";
-
+import ShakeDetector from "../components/ShakeDetector";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Ionicons from "@expo/vector-icons/Ionicons";
 export default function CreateVaultCard(props: any) {
@@ -63,6 +63,9 @@ export default function CreateVaultCard(props: any) {
       setPassword(pwd);
     });
   }
+  if (ShakeDetector()) {
+    createRandomPassword();
+  }
   function emailIsPawned(email: string) {
     if (!email || !email.includes("@")) {
       Alert.alert("Invalid email", "Please enter a valid email address");
@@ -97,7 +100,7 @@ export default function CreateVaultCard(props: any) {
 
   return (
     <ScrollView style={{ backgroundColor: theme.background }}>
-      <View style={{ flex: 1, paddingTop: 50 }}>
+      <View style={{ flex: 1, paddingTop: 50, paddingBottom: 100 }}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={{ position: "absolute", top: 10, left: 10, zIndex: 10 }}
