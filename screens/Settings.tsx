@@ -11,13 +11,12 @@ import {
 import Title from "../components/ui/Title";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Feather from "@expo/vector-icons/Feather";
-import { useTheme } from "../contexts/ThemeContext";
 
 const ACCENT = "#e1a17b";
 
 export default function Settings() {
   const [biometric, setBiometric] = useState<boolean>(false);
-  const { theme, setDarkMode } = useTheme();
+  const [darkMode, setDarkMode] = useState<boolean>(false);
   const [showPasswords, setShowPasswords] = useState<boolean>(false);
   const [compactList, setCompactList] = useState<boolean>(false);
 
@@ -25,9 +24,11 @@ export default function Settings() {
     const load = async () => {
       try {
         const b = await AsyncStorage.getItem("settings_biometric");
+        const d = await AsyncStorage.getItem("settings_darkMode");
         const s = await AsyncStorage.getItem("settings_showPasswords");
         const c = await AsyncStorage.getItem("settings_compactList");
         if (b !== null) setBiometric(b === "1");
+        if (d !== null) setDarkMode(d === "1");
         if (s !== null) setShowPasswords(s === "1");
         if (c !== null) setCompactList(c === "1");
       } catch (e) {
@@ -120,11 +121,9 @@ export default function Settings() {
             <Text style={styles.label}>Dark mode</Text>
           </View>
           <Switch
-            value={theme.dark}
-            onValueChange={async (val: boolean) => {
-              await setDarkMode(val);
-            }}
-            thumbColor={theme.dark ? ACCENT : undefined}
+            value={darkMode}
+            onValueChange={onToggle("settings_darkMode", setDarkMode)}
+            thumbColor={darkMode ? ACCENT : undefined}
           />
         </View>
 
