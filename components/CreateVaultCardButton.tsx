@@ -9,7 +9,7 @@ export default function CreateVaultCardButton({
 }) {
   const theme = useTheme();
   return (
-    <View>
+    <View style={{ marginBottom: 10 }}>
       <Pressable
         onPress={onPress}
         style={({ pressed }) => [
