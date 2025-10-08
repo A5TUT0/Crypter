@@ -41,3 +41,7 @@ yarn-error.*
 /android
 IPA.md
 package-lock.json
+CODING_CONVENTIONS.md
+tree.txt
+project_analysis.md
+plan_soll_ist.csv
