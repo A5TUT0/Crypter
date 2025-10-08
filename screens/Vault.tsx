@@ -1,14 +1,16 @@
-import React from "react";
-import { ScrollView, View } from "react-native";
+import React, { useState } from "react";
+import { ScrollView, View, Text } from "react-native";
 import { useTheme } from "../contexts/ThemeContext";
 import Title from "../components/ui/Title";
 import { VaultCard } from "../components/VaultCard";
 import CreateVaultCardButton from "../components/CreateVaultCardButton";
 import { useVaultEntries, Entry } from "../hooks/AsyncStorage";
+import SearchBar from "../components/SearchBar";
 export default function Vault(props: any) {
   const { navigation } = props;
   const entries = useVaultEntries();
   const theme = useTheme();
+  const [searchQuery, setSearchQuery] = useState("");
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
@@ -20,19 +22,34 @@ export default function Vault(props: any) {
         }}
       >
         <Title title="Vault"></Title>
+        <SearchBar onChangeText={setSearchQuery} value={searchQuery} />
       </View>
       <ScrollView style={{ height: "80%", marginBottom: 100 }}>
-        {entries.map((entry: Entry) => (
-          <VaultCard
-            key={entry.id}
-            title={entry.name}
-            user={entry.username}
-            logo={require("../assets/icon.png")}
-            onPress={() =>
-              navigation.navigate("VaultCardDetails", { entryId: entry.id })
-            }
-          />
-        ))}
+        {entries.filter((entry: Entry) =>
+          entry.name.toLowerCase().includes(searchQuery.toLowerCase())
+        ).length === 0 ? (
+          <View style={{ alignItems: "center", marginTop: 20 }}>
+            <Text style={{ color: theme.text, fontSize: 16 }}>
+              No vaults found
+            </Text>
+          </View>
+        ) : (
+          entries
+            .filter((entry: Entry) =>
+              entry.name.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+            .map((entry: Entry) => (
+              <VaultCard
+                key={entry.id}
+                title={entry.name}
+                user={entry.username}
+                logo={require("../assets/icon.png")}
+                onPress={() =>
+                  navigation.navigate("VaultCardDetails", { entryId: entry.id })
+                }
+              />
+            ))
+        )}
       </ScrollView>
       <CreateVaultCardButton
         onPress={() => navigation.navigate("CreateVault")}
