@@ -16,7 +16,8 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "crypter.luan.world"
     },
     "android": {
       "adaptiveIcon": {
@@ -24,7 +25,8 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "crypter.luan.world"
     },
     "web": {
       "favicon": "./assets/favicon.png"
