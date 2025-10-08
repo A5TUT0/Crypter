@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import Title from "../components/ui/Title";
 import { Input, InputPassword } from "../components/ui/Input";
@@ -45,55 +46,130 @@ export default function CreateVaultCard(props: any) {
       Alert.alert("Error", "Could not save entry");
     }
   }
+  const fetchPassword = () => {
+    return fetch("https://passwordwolf.com/api/?repeat=1")
+      .then((response) => response.json())
+      .then((json) => {
+        return json[0].password;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  function createRandomPassword() {
+    fetchPassword().then((pwd) => {
+      setPassword(pwd);
+    });
+  }
+  function emailIsPawned(email: string) {
+    if (!email || !email.includes("@")) {
+      Alert.alert("Invalid email", "Please enter a valid email address");
+      return;
+    }
+    fetch("https://api.xposedornot.com/v1/check-email/" + email)
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json);
+        if (json.breaches && json.breaches.length > 0) {
+          const breaches = json.breaches.map((b: any) => b).join(",  ");
+          Alert.alert(
+            "Warning",
+            `This email has been found in data breaches:\n${breaches}\nConsider changing it.`
+          );
+        } else if (json.breaches && json.breaches.length === 0) {
+          Alert.alert(
+            "Good news",
+            "This email has not been found in breaches."
+          );
+        } else if (json.Error) {
+          Alert.alert(
+            "Error",
+            "Could not check the email. Please try again later."
+          );
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 
   return (
-    <View style={{ flex: 1, paddingTop: 50 }}>
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={{ position: "absolute", top: 10, left: 10, zIndex: 10 }}
-      >
-        <Ionicons name="arrow-back" size={34} color="black" />
-      </TouchableOpacity>
-      <Title title="Create Login" />
-      <View>
-        <Input placeHolderText="Title" value={name} onChangeText={setName} />
-        <Input
-          placeHolderText="Username or Email"
-          value={username}
-          onChangeText={setUsername}
-        />
-        <InputPassword value={password} onChangeText={setPassword} />
-        <Input
-          placeHolderText="Website"
-          value={website}
-          onChangeText={setWebsite}
-        />
-        <Pressable
-          onPress={() => setFavorite(!favorite)}
-          style={{ flexDirection: "row", alignItems: "center", padding: 20 }}
+    <ScrollView>
+      <View style={{ flex: 1, paddingTop: 50 }}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={{ position: "absolute", top: 10, left: 10, zIndex: 10 }}
         >
-          <Ionicons
-            name={favorite ? "star" : "star-outline"}
-            size={24}
-            color={favorite ? "#e1a17b" : "#666"}
+          <Ionicons name="arrow-back" size={34} color="black" />
+        </TouchableOpacity>
+        <Title title="Create Login" />
+        <View>
+          <Input placeHolderText="Title" value={name} onChangeText={setName} />
+          <Input
+            placeHolderText="Username or Email"
+            value={username}
+            onChangeText={setUsername}
           />
-          <Text style={{ marginLeft: 10, fontSize: 16, color: "#333" }}>
-            {favorite ? "Unmark Favorite" : "Mark as Favorite"}
+          <Pressable
+            onPress={() => emailIsPawned(username)}
+            style={{
+              alignItems: "flex-end",
+              paddingRight: 20,
+              marginBottom: 10,
+            }}
+          >
+            <Text style={{ color: "#e1a17b", fontWeight: "600" }}>
+              Check if email is pwned
+            </Text>
+          </Pressable>
+          <InputPassword value={password} onChangeText={setPassword} />
+          <Pressable
+            onPress={createRandomPassword}
+            style={{
+              alignItems: "flex-end",
+              paddingRight: 20,
+              marginBottom: 10,
+            }}
+          >
+            <Text style={{ color: "#e1a17b", fontWeight: "600" }}>
+              Generate Password
+            </Text>
+          </Pressable>
+          <Input
+            placeHolderText="Website"
+            value={website}
+            onChangeText={setWebsite}
+          />
+          <Text style={{ marginLeft: 20, marginTop: 10, color: "#666" }}>
+            With out http:// or https://
           </Text>
-        </Pressable>
+          <Pressable
+            onPress={() => setFavorite(!favorite)}
+            style={{ flexDirection: "row", alignItems: "center", padding: 20 }}
+          >
+            <Ionicons
+              name={favorite ? "star" : "star-outline"}
+              size={24}
+              color={favorite ? "#e1a17b" : "#666"}
+            />
+            <Text style={{ marginLeft: 10, fontSize: 16, color: "#333" }}>
+              {favorite ? "Unmark Favorite" : "Mark as Favorite"}
+            </Text>
+          </Pressable>
+        </View>
+        <View style={{ padding: 20 }}>
+          <Pressable
+            onPress={saveEntry}
+            style={({ pressed }) => [
+              styles.createButton,
+              pressed && styles.createButtonPressed,
+            ]}
+          >
+            <Text style={styles.createButtonText}>Create</Text>
+          </Pressable>
+        </View>
       </View>
-      <View style={{ padding: 20 }}>
-        <Pressable
-          onPress={saveEntry}
-          style={({ pressed }) => [
-            styles.createButton,
-            pressed && styles.createButtonPressed,
-          ]}
-        >
-          <Text style={styles.createButtonText}>Create</Text>
-        </Pressable>
-      </View>
-    </View>
+    </ScrollView>
   );
 }
 
