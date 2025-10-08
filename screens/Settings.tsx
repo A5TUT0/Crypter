@@ -12,26 +12,22 @@ import {
 import Title from "../components/ui/Title";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Feather from "@expo/vector-icons/Feather";
+import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
 
 const ACCENT = "#e1a17b";
 
 export default function Settings() {
   const theme = useTheme();
-  const [biometric, setBiometric] = useState<boolean>(false);
   const [darkMode, setDarkMode] = useState<boolean>(false);
-  const [showPasswords, setShowPasswords] = useState<boolean>(false);
   const [compactList, setCompactList] = useState<boolean>(false);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const b = await AsyncStorage.getItem("settings_biometric");
         const d = await AsyncStorage.getItem("settings_darkMode");
-        const s = await AsyncStorage.getItem("settings_showPasswords");
         const c = await AsyncStorage.getItem("settings_compactList");
-        if (b !== null) setBiometric(b === "1");
         if (d !== null) setDarkMode(d === "1");
-        if (s !== null) setShowPasswords(s === "1");
         if (c !== null) setCompactList(c === "1");
       } catch (e) {
         console.warn("Failed to load settings", e);
@@ -49,7 +45,11 @@ export default function Settings() {
   };
 
   const onToggle =
-    (key: string, setter: (v: boolean) => void) => async (val: boolean) => {
+    (
+      key: "settings_darkMode" | "settings_compactList",
+      setter: (v: boolean) => void
+    ) =>
+    async (val: boolean) => {
       setter(val);
       await persist(key, val);
     };
@@ -75,7 +75,23 @@ export default function Settings() {
       ]
     );
   };
-
+  async function onExportData() {
+    try {
+      const data = await AsyncStorage.getItem("vault_entries");
+      const json = data ? JSON.stringify(JSON.parse(data), null, 2) : "[]";
+      const fileName = "vault_entries_export.json";
+      const file = new FileSystem.File(FileSystem.Paths.cache, fileName);
+      const writer = file.writableStream();
+      const encoder = new TextEncoder();
+      const encoded = encoder.encode(json);
+      const writerStream = writer.getWriter();
+      await writerStream.write(encoded);
+      await writerStream.close();
+      await Sharing.shareAsync(file.uri, { mimeType: "application/json" });
+    } catch (e) {
+      Alert.alert("Error", "Could not export data");
+    }
+  }
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: theme.background }]}
@@ -90,40 +106,7 @@ export default function Settings() {
 
       <View style={[styles.section, { backgroundColor: theme.card }]}>
         <Text style={[styles.sectionTitle, { color: theme.primary }]}>
-          Seguridad
-        </Text>
-        <View style={[styles.row, { backgroundColor: theme.card }]}>
-          <View style={styles.rowLeft}>
-            <Feather name="unlock" size={20} color={ACCENT} />
-            <Text style={[styles.label, { color: theme.text }]}>
-              Biometric unlock
-            </Text>
-          </View>
-          <Switch
-            value={biometric}
-            onValueChange={onToggle("settings_biometric", setBiometric)}
-            thumbColor={biometric ? ACCENT : undefined}
-          />
-        </View>
-
-        <View style={[styles.row, { backgroundColor: theme.card }]}>
-          <View style={styles.rowLeft}>
-            <Feather name="lock" size={20} color={ACCENT} />
-            <Text style={[styles.label, { color: theme.text }]}>
-              Show passwords
-            </Text>
-          </View>
-          <Switch
-            value={showPasswords}
-            onValueChange={onToggle("settings_showPasswords", setShowPasswords)}
-            thumbColor={showPasswords ? ACCENT : undefined}
-          />
-        </View>
-      </View>
-
-      <View style={[styles.section, { backgroundColor: theme.card }]}>
-        <Text style={[styles.sectionTitle, { color: theme.primary }]}>
-          Apariencia
+          Appearance
         </Text>
         <View style={[styles.row, { backgroundColor: theme.card }]}>
           <View style={styles.rowLeft}>
@@ -152,9 +135,14 @@ export default function Settings() {
         </View>
       </View>
 
-      <View style={[styles.section, { backgroundColor: theme.card }]}>
+      <View
+        style={[
+          styles.section,
+          { backgroundColor: theme.card, marginBottom: 50 },
+        ]}
+      >
         <Text style={[styles.sectionTitle, { color: theme.primary }]}>
-          Acciones
+          Data
         </Text>
 
         <Pressable
@@ -175,7 +163,7 @@ export default function Settings() {
               borderColor: theme.primary,
             },
           ]}
-          onPress={() => Alert.alert("Export", "Export feature coming soon")}
+          onPress={() => onExportData()}
         >
           <Text style={[styles.actionText, { color: theme.primary }]}>
             Export data
@@ -190,8 +178,8 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   header: {
     paddingTop: 40,
-    paddingHorizontal: 16,
     paddingBottom: 8,
+    paddingHorizontal: 16,
     alignItems: "center",
   },
   subtitle: { marginTop: 6 },
