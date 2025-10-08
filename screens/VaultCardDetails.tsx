@@ -6,7 +6,10 @@ import {
   Linking,
   Alert,
   Pressable,
+  Platform,
 } from "react-native";
+import { ToastAndroid } from "react-native";
+import * as Clipboard from "expo-clipboard";
 import { useTheme } from "../contexts/ThemeContext";
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -63,18 +66,15 @@ export default function Details({ route, navigation }: any) {
 
   async function copyToClipboard(text: string) {
     try {
-      // dynamically require clipboard package if available
-      const Clipboard = require("@react-native-clipboard/clipboard");
-      if (Clipboard && Clipboard.setString) {
-        Clipboard.setString(text);
+      await Clipboard.setStringAsync(text);
+      if (Platform.OS === "android") {
+        ToastAndroid.show("Password copied to clipboard", ToastAndroid.SHORT);
+      } else {
         Alert.alert("Copied", "Password copied to clipboard");
-        return;
       }
-    } catch (_) {
-      // fallback
+    } catch (e: any) {
+      Alert.alert("Copy failed", e?.message ?? "Cannot access clipboard");
     }
-    // fallback: show the password in an alert for manual copy
-    Alert.alert("Copy", "Cannot access clipboard. Password: " + text);
   }
 
   return (
@@ -131,11 +131,7 @@ export default function Details({ route, navigation }: any) {
               { marginLeft: 8, backgroundColor: theme.card },
             ]}
           >
-            <MaterialIcons
-              name="file-download"
-              size={20}
-              color={theme.primary}
-            />
+            <Feather name="copy" size={24} color={theme.primary} />
           </Pressable>
         </View>
 

@@ -104,11 +104,11 @@ export default function Settings() {
         </Text>
       </View>
 
-      <View style={[styles.section, { backgroundColor: theme.card }]}>
+      <View style={[styles.section]}>
         <Text style={[styles.sectionTitle, { color: theme.primary }]}>
           Appearance
         </Text>
-        <View style={[styles.row, { backgroundColor: theme.card }]}>
+        <View style={[styles.row]}>
           <View style={styles.rowLeft}>
             <Feather name="moon" size={20} color={theme.primary} />
             <Text style={[styles.label, { color: theme.text }]}>Dark mode</Text>
@@ -120,7 +120,7 @@ export default function Settings() {
           />
         </View>
 
-        <View style={[styles.row, { backgroundColor: theme.card }]}>
+        <View style={styles.row}>
           <View style={styles.rowLeft}>
             <Feather name="layout" size={20} color={ACCENT} />
             <Text style={[styles.label, { color: theme.text }]}>
@@ -135,12 +135,7 @@ export default function Settings() {
         </View>
       </View>
 
-      <View
-        style={[
-          styles.section,
-          { backgroundColor: theme.card, marginBottom: 50 },
-        ]}
-      >
+      <View style={[styles.section, { marginBottom: 50 }]}>
         <Text style={[styles.sectionTitle, { color: theme.primary }]}>
           Data
         </Text>
