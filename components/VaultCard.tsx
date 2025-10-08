@@ -19,7 +19,7 @@ export function VaultCard({
   return (
     <View>
       <Pressable
-        onPressIn={() => {
+        onPress={() => {
           onPress && onPress();
         }}
         style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1.0 }]}
