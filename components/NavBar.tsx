@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
+import { useTheme } from "../contexts/ThemeContext";
 import Entypo from "@expo/vector-icons/Entypo";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Feather from "@expo/vector-icons/Feather";
@@ -8,8 +9,9 @@ import Fontisto from "@expo/vector-icons/Fontisto";
 export default function NavBar() {
   const navigation: any = useNavigation();
   const [selected, setSelected] = useState<string>("Vault");
-  const activeColor = "#e1a17b";
-  const inactiveColor = "black";
+  const theme = useTheme();
+  const activeColor = theme.primary;
+  const inactiveColor = theme.text;
 
   return (
     <View
@@ -19,8 +21,8 @@ export default function NavBar() {
         alignItems: "center",
         padding: 10,
         borderTopWidth: 1,
-        borderTopColor: "#ccc",
-        backgroundColor: "#f9f9f9",
+        borderTopColor: theme.border,
+        backgroundColor: theme.card,
         position: "absolute",
         bottom: 0,
         width: "100%",

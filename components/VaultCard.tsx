@@ -1,5 +1,6 @@
 import { Pressable, Image, Text, View } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useTheme } from "../contexts/ThemeContext";
 
 export function VaultCard({
   id,
@@ -14,6 +15,7 @@ export function VaultCard({
   logo: any;
   onPress?: () => void;
 }) {
+  const theme = useTheme();
   return (
     <View>
       <Pressable
@@ -29,7 +31,7 @@ export function VaultCard({
             padding: 20,
             margin: 10,
             borderRadius: 10,
-            backgroundColor: "#fcfcfcff",
+            backgroundColor: theme.card,
           }}
         >
           <View
@@ -38,7 +40,7 @@ export function VaultCard({
               height: 50,
               borderRadius: 15,
               overflow: "hidden",
-              backgroundColor: "#ffffffff",
+              backgroundColor: theme.background,
               alignItems: "center",
               justifyContent: "center",
             }}
@@ -50,6 +52,7 @@ export function VaultCard({
               style={{
                 fontSize: 20,
                 fontWeight: "bold",
+                color: theme.text,
               }}
             >
               {title}
@@ -57,13 +60,14 @@ export function VaultCard({
             <Text
               style={{
                 fontSize: 16,
-                color: "#666",
+                color: theme.text,
+                opacity: 0.7,
               }}
             >
               {user}
             </Text>
           </View>
-          <FontAwesome name="chevron-right" size={14} color="black" />
+          <FontAwesome name="chevron-right" size={14} color={theme.text} />
         </View>
       </Pressable>
     </View>

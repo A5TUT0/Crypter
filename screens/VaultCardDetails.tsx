@@ -7,6 +7,7 @@ import {
   Alert,
   Pressable,
 } from "react-native";
+import { useTheme } from "../contexts/ThemeContext";
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Feather from "@expo/vector-icons/Feather";
@@ -23,6 +24,7 @@ type Entry = {
 export default function Details({ route, navigation }: any) {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [showPassword, setShowPassword] = useState(false);
+  const theme = useTheme();
 
   useEffect(() => {
     const load = async () => {
@@ -42,11 +44,11 @@ export default function Details({ route, navigation }: any) {
     load();
   }, []);
   const entry = entries.find((e) => e.id === route.params.entryId);
-  console.log(entry);
+  // Defensive: if entry not found, show fallback values
   const name = entry ? entry.name : "N/A";
   const username = entry ? entry.username : "N/A";
-  const password = entry ? entry.password : "N/A";
-  const website = entry ? entry.website : "N/A";
+  const password = entry ? entry.password : "";
+  const website = entry ? entry.website : "";
 
   function openWebsite(url?: string) {
     if (!url) return;
@@ -74,51 +76,74 @@ export default function Details({ route, navigation }: any) {
     // fallback: show the password in an alert for manual copy
     Alert.alert("Copy", "Cannot access clipboard. Password: " + text);
   }
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation?.goBack()}
-          style={styles.backButton}
+          style={[styles.backButton, { backgroundColor: theme.card }]}
         >
-          <Feather name="arrow-left" size={22} color="#333" />
+          <Feather name="arrow-left" size={22} color={theme.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Details</Text>
+        <Text style={[styles.headerTitle, { color: theme.text }]}>Details</Text>
       </View>
 
-      <View style={styles.card}>
-        <Text style={styles.label}>Title</Text>
-        <Text style={styles.value}>{name}</Text>
+      <View
+        style={[
+          styles.card,
+          {
+            backgroundColor: theme.card,
+            borderColor: theme.border,
+            shadowColor: theme.text,
+          },
+        ]}
+      >
+        <Text style={[styles.label, { color: theme.primary }]}>Title</Text>
+        <Text style={[styles.value, { color: theme.text }]}>{name}</Text>
 
-        <Text style={styles.label}>Username / Email</Text>
-        <Text style={styles.value}>{username}</Text>
+        <Text style={[styles.label, { color: theme.primary }]}>
+          Username / Email
+        </Text>
+        <Text style={[styles.value, { color: theme.text }]}>{username}</Text>
 
-        <Text style={styles.label}>Password</Text>
+        <Text style={[styles.label, { color: theme.primary }]}>Password</Text>
         <View style={styles.row}>
-          <Text style={[styles.value, { flex: 1 }]}>
-            {showPassword ? password : "•".repeat(Math.max(8, password.length))}
+          <Text style={[styles.value, { flex: 1, color: theme.text }]}>
+            {showPassword
+              ? password
+              : "\u2022".repeat(Math.max(8, password.length))}
           </Text>
           <Pressable
             onPress={() => setShowPassword((s) => !s)}
-            style={styles.iconButton}
+            style={[styles.iconButton, { backgroundColor: theme.card }]}
           >
             <Feather
               name={showPassword ? "eye" : "eye-off"}
               size={20}
-              color="#a1745a"
+              color={theme.primary}
             />
           </Pressable>
           <Pressable
             onPress={() => copyToClipboard(password)}
-            style={[styles.iconButton, { marginLeft: 8 }]}
+            style={[
+              styles.iconButton,
+              { marginLeft: 8, backgroundColor: theme.card },
+            ]}
           >
-            <MaterialIcons name="file-download" size={20} color="#6b6b6b" />
+            <MaterialIcons
+              name="file-download"
+              size={20}
+              color={theme.primary}
+            />
           </Pressable>
         </View>
 
-        <Text style={styles.label}>Website</Text>
+        <Text style={[styles.label, { color: theme.primary }]}>Website</Text>
         <Pressable onPress={() => openWebsite(website)}>
-          <Text style={[styles.value, styles.link]}>{website || "N/A"}</Text>
+          <Text style={[styles.value, styles.link, { color: theme.primary }]}>
+            {website || "N/A"}
+          </Text>
         </Pressable>
       </View>
     </View>
@@ -126,7 +151,7 @@ export default function Details({ route, navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
+  container: { flex: 1 },
   header: {
     marginTop: 40,
     paddingHorizontal: 16,
@@ -137,32 +162,27 @@ const styles = StyleSheet.create({
   backButton: {
     padding: 8,
     borderRadius: 8,
-    backgroundColor: "#f5f5f5",
   },
   headerTitle: {
     flex: 1,
     textAlign: "center",
     fontSize: 20,
     fontWeight: "700",
-    color: "#333",
     marginRight: 40,
   },
   card: {
     margin: 16,
     padding: 18,
     borderRadius: 12,
-    backgroundColor: "#fff7f2",
     borderWidth: 1,
-    borderColor: "#f0e3db",
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
     shadowRadius: 6,
     elevation: 2,
   },
-  label: { color: "#e1a17b", fontSize: 14, fontWeight: "700", marginTop: 12 },
-  value: { fontSize: 16, color: "#111", marginTop: 6 },
+  label: { fontSize: 14, fontWeight: "700", marginTop: 12 },
+  value: { fontSize: 16, marginTop: 6 },
   row: { flexDirection: "row", alignItems: "center", marginTop: 6 },
-  iconButton: { padding: 6, borderRadius: 6, backgroundColor: "#fff" },
-  link: { color: "#a1745a", textDecorationLine: "underline" },
+  iconButton: { padding: 6, borderRadius: 6 },
+  link: { textDecorationLine: "underline" },
 });

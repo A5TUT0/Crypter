@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTheme } from "../contexts/ThemeContext";
 import {
   View,
   StyleSheet,
@@ -15,6 +16,7 @@ import Feather from "@expo/vector-icons/Feather";
 const ACCENT = "#e1a17b";
 
 export default function Settings() {
+  const theme = useTheme();
   const [biometric, setBiometric] = useState<boolean>(false);
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const [showPasswords, setShowPasswords] = useState<boolean>(false);
@@ -76,22 +78,26 @@ export default function Settings() {
 
   return (
     <ScrollView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: theme.background }]}
       contentContainerStyle={{ paddingBottom: 60 }}
     >
       <View style={styles.header}>
         <Title title="Settings" />
-        <Text style={styles.subtitle}>
+        <Text style={[styles.subtitle, { color: theme.text }]}>
           Manage your app preferences and data
         </Text>
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Seguridad</Text>
-        <View style={styles.row}>
+      <View style={[styles.section, { backgroundColor: theme.card }]}>
+        <Text style={[styles.sectionTitle, { color: theme.primary }]}>
+          Seguridad
+        </Text>
+        <View style={[styles.row, { backgroundColor: theme.card }]}>
           <View style={styles.rowLeft}>
             <Feather name="unlock" size={20} color={ACCENT} />
-            <Text style={styles.label}>Biometric unlock</Text>
+            <Text style={[styles.label, { color: theme.text }]}>
+              Biometric unlock
+            </Text>
           </View>
           <Switch
             value={biometric}
@@ -100,10 +106,12 @@ export default function Settings() {
           />
         </View>
 
-        <View style={styles.row}>
+        <View style={[styles.row, { backgroundColor: theme.card }]}>
           <View style={styles.rowLeft}>
             <Feather name="lock" size={20} color={ACCENT} />
-            <Text style={styles.label}>Show passwords</Text>
+            <Text style={[styles.label, { color: theme.text }]}>
+              Show passwords
+            </Text>
           </View>
           <Switch
             value={showPasswords}
@@ -113,12 +121,14 @@ export default function Settings() {
         </View>
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Apariencia</Text>
-        <View style={styles.row}>
+      <View style={[styles.section, { backgroundColor: theme.card }]}>
+        <Text style={[styles.sectionTitle, { color: theme.primary }]}>
+          Apariencia
+        </Text>
+        <View style={[styles.row, { backgroundColor: theme.card }]}>
           <View style={styles.rowLeft}>
-            <Feather name="moon" size={20} color={ACCENT} />
-            <Text style={styles.label}>Dark mode</Text>
+            <Feather name="moon" size={20} color={theme.primary} />
+            <Text style={[styles.label, { color: theme.text }]}>Dark mode</Text>
           </View>
           <Switch
             value={darkMode}
@@ -127,10 +137,12 @@ export default function Settings() {
           />
         </View>
 
-        <View style={styles.row}>
+        <View style={[styles.row, { backgroundColor: theme.card }]}>
           <View style={styles.rowLeft}>
             <Feather name="layout" size={20} color={ACCENT} />
-            <Text style={styles.label}>Compact list</Text>
+            <Text style={[styles.label, { color: theme.text }]}>
+              Compact list
+            </Text>
           </View>
           <Switch
             value={compactList}
@@ -140,21 +152,32 @@ export default function Settings() {
         </View>
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Acciones</Text>
+      <View style={[styles.section, { backgroundColor: theme.card }]}>
+        <Text style={[styles.sectionTitle, { color: theme.primary }]}>
+          Acciones
+        </Text>
 
-        <Pressable style={styles.actionButton} onPress={onClearData}>
-          <Text style={styles.actionText}>Clear all data</Text>
+        <Pressable
+          style={[styles.actionButton, { backgroundColor: theme.primary }]}
+          onPress={onClearData}
+        >
+          <Text style={[styles.actionText, { color: theme.card }]}>
+            Clear all data
+          </Text>
         </Pressable>
 
         <Pressable
           style={[
             styles.actionButton,
-            { backgroundColor: "#fff", borderWidth: 1, borderColor: ACCENT },
+            {
+              backgroundColor: theme.card,
+              borderWidth: 1,
+              borderColor: theme.primary,
+            },
           ]}
           onPress={() => Alert.alert("Export", "Export feature coming soon")}
         >
-          <Text style={[styles.actionText, { color: ACCENT }]}>
+          <Text style={[styles.actionText, { color: theme.primary }]}>
             Export data
           </Text>
         </Pressable>
@@ -164,19 +187,18 @@ export default function Settings() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
+  container: { flex: 1 },
   header: {
     paddingTop: 40,
     paddingHorizontal: 16,
     paddingBottom: 8,
     alignItems: "center",
   },
-  subtitle: { color: "#666", marginTop: 6 },
+  subtitle: { marginTop: 6 },
   section: { marginTop: 20, paddingHorizontal: 16 },
   sectionTitle: {
     fontSize: 14,
     fontWeight: "700",
-    color: ACCENT,
     marginBottom: 8,
   },
   row: {
@@ -184,7 +206,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingVertical: 12,
-    backgroundColor: "#fff",
   },
   rowLeft: { flexDirection: "row", alignItems: "center" },
   label: { marginLeft: 12, fontSize: 16 },
@@ -192,9 +213,8 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingVertical: 12,
     paddingHorizontal: 14,
-    backgroundColor: ACCENT,
     borderRadius: 8,
     alignItems: "center",
   },
-  actionText: { color: "#fff", fontWeight: "700" },
+  actionText: { fontWeight: "700" },
 });

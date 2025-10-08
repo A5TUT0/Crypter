@@ -1,5 +1,6 @@
 import React from "react";
 import { ScrollView, View } from "react-native";
+import { useTheme } from "../contexts/ThemeContext";
 import Title from "../components/ui/Title";
 import { VaultCard } from "../components/VaultCard";
 import CreateVaultCardButton from "../components/CreateVaultCardButton";
@@ -8,9 +9,10 @@ import { useVaultEntries, Entry } from "../hooks/AsyncStorage";
 export default function Vault(props: any) {
   const { navigation } = props;
   const entries = useVaultEntries();
+  const theme = useTheme();
 
   return (
-    <View>
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
       <View
         style={{
           marginTop: 50,

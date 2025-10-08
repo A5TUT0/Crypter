@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import { useTheme } from "../contexts/ThemeContext";
 import Title from "../components/ui/Title";
 import { Input, InputPassword } from "../components/ui/Input";
 import { useState } from "react";
@@ -15,6 +16,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Ionicons from "@expo/vector-icons/Ionicons";
 export default function CreateVaultCard(props: any) {
   const { navigation } = props;
+  const theme = useTheme();
 
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
@@ -94,13 +96,13 @@ export default function CreateVaultCard(props: any) {
   }
 
   return (
-    <ScrollView>
+    <ScrollView style={{ backgroundColor: theme.background }}>
       <View style={{ flex: 1, paddingTop: 50 }}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={{ position: "absolute", top: 10, left: 10, zIndex: 10 }}
         >
-          <Ionicons name="arrow-back" size={34} color="black" />
+          <Ionicons name="arrow-back" size={34} color={theme.text} />
         </TouchableOpacity>
         <Title title="Create Login" />
         <View>
@@ -118,7 +120,7 @@ export default function CreateVaultCard(props: any) {
               marginBottom: 10,
             }}
           >
-            <Text style={{ color: "#e1a17b", fontWeight: "600" }}>
+            <Text style={{ color: theme.primary, fontWeight: "600" }}>
               Check if email is pwned
             </Text>
           </Pressable>
@@ -131,7 +133,7 @@ export default function CreateVaultCard(props: any) {
               marginBottom: 10,
             }}
           >
-            <Text style={{ color: "#e1a17b", fontWeight: "600" }}>
+            <Text style={{ color: theme.primary, fontWeight: "600" }}>
               Generate Password
             </Text>
           </Pressable>
@@ -140,7 +142,14 @@ export default function CreateVaultCard(props: any) {
             value={website}
             onChangeText={setWebsite}
           />
-          <Text style={{ marginLeft: 20, marginTop: 10, color: "#666" }}>
+          <Text
+            style={{
+              marginLeft: 20,
+              marginTop: 10,
+              color: theme.text,
+              opacity: 0.7,
+            }}
+          >
             With out http:// or https://
           </Text>
           <Pressable
@@ -150,9 +159,9 @@ export default function CreateVaultCard(props: any) {
             <Ionicons
               name={favorite ? "star" : "star-outline"}
               size={24}
-              color={favorite ? "#e1a17b" : "#666"}
+              color={favorite ? theme.primary : theme.text}
             />
-            <Text style={{ marginLeft: 10, fontSize: 16, color: "#333" }}>
+            <Text style={{ marginLeft: 10, fontSize: 16, color: theme.text }}>
               {favorite ? "Unmark Favorite" : "Mark as Favorite"}
             </Text>
           </Pressable>
@@ -161,11 +170,13 @@ export default function CreateVaultCard(props: any) {
           <Pressable
             onPress={saveEntry}
             style={({ pressed }) => [
-              styles.createButton,
+              { ...styles.createButton, backgroundColor: theme.primary },
               pressed && styles.createButtonPressed,
             ]}
           >
-            <Text style={styles.createButtonText}>Create</Text>
+            <Text style={{ ...styles.createButtonText, color: theme.card }}>
+              Create
+            </Text>
           </Pressable>
         </View>
       </View>
@@ -175,7 +186,6 @@ export default function CreateVaultCard(props: any) {
 
 const styles = StyleSheet.create({
   createButton: {
-    backgroundColor: "#e1a17b",
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 12,
@@ -188,11 +198,9 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   createButtonPressed: {
-    backgroundColor: "#a1745a",
     transform: [{ scale: 0.995 }],
   },
   createButtonText: {
-    color: "#ffffff",
     fontWeight: "700",
     fontSize: 16,
   },
