@@ -17,6 +17,7 @@ export default function SearchBar({
         borderRadius: 8,
         margin: 10,
       }}
+      testID="search-bar-container"
     >
       <TextInput
         placeholder="Search vaults..."
@@ -26,6 +27,9 @@ export default function SearchBar({
         value={value}
         autoCorrect={false}
         autoCapitalize="none"
+        testID="search-bar-input"
+        accessibilityLabel="Search vaults"
+        accessibilityHint="Enter text to search for vault entries"
       />
     </View>
   );

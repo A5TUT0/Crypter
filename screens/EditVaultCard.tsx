@@ -89,12 +89,18 @@ export function EditVaultCard(props: any) {
   }
 
   return (
-    <ScrollView style={{ backgroundColor: theme.background }}>
+    <ScrollView
+      style={{ backgroundColor: theme.background }}
+      testID="edit-vault-scroll"
+    >
       <View style={{ flex: 1, paddingTop: 50, paddingBottom: 100 }}>
         <View style={{ position: "relative", alignItems: "center" }}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={{ position: "absolute", left: 10, top: 0, zIndex: 10 }}
+            testID="edit-vault-back-button"
+            accessibilityLabel="Go back"
+            accessibilityRole="button"
           >
             <Ionicons name="arrow-back" size={34} color={theme.text} />
           </TouchableOpacity>
@@ -103,7 +109,10 @@ export function EditVaultCard(props: any) {
 
         {/* Preview del favicon actual */}
         {website && (
-          <View style={{ alignItems: "center", marginVertical: 20 }}>
+          <View
+            style={{ alignItems: "center", marginVertical: 20 }}
+            testID="edit-vault-favicon-preview"
+          >
             <FaviconImage domain={website} size={80} borderRadius={20} />
             <Text
               style={{
@@ -119,11 +128,17 @@ export function EditVaultCard(props: any) {
         )}
 
         <View>
-          <Input placeHolderText="Title*" value={name} onChangeText={setName} />
+          <Input
+            placeHolderText="Title*"
+            value={name}
+            onChangeText={setName}
+            testID="edit-vault-name-input"
+          />
           <Input
             placeHolderText="Username or Email*"
             value={username}
             onChangeText={setUsername}
+            testID="edit-vault-username-input"
           />
           <Pressable
             onPress={() => checkEmailBreach(username)}
@@ -132,6 +147,9 @@ export function EditVaultCard(props: any) {
               paddingRight: 20,
               marginBottom: 10,
             }}
+            testID="edit-vault-check-breach-button"
+            accessibilityLabel="Check if email is pwned"
+            accessibilityRole="button"
           >
             <Text style={{ color: theme.primary, fontWeight: "600" }}>
               Check if email is pwned
@@ -141,6 +159,7 @@ export function EditVaultCard(props: any) {
             value={password}
             onChangeText={setPassword}
             placeHolderText="Password*"
+            testID="edit-vault-password-input"
           />
           <Pressable
             onPress={generatePassword}
@@ -149,6 +168,9 @@ export function EditVaultCard(props: any) {
               paddingRight: 20,
               marginBottom: 10,
             }}
+            testID="edit-vault-generate-password-button"
+            accessibilityLabel="Generate random password"
+            accessibilityRole="button"
           >
             <Text style={{ color: theme.primary, fontWeight: "600" }}>
               Generate Password
@@ -158,6 +180,7 @@ export function EditVaultCard(props: any) {
             placeHolderText="Website"
             value={website}
             onChangeText={setWebsite}
+            testID="edit-vault-website-input"
           />
           <Text
             style={{
@@ -172,6 +195,12 @@ export function EditVaultCard(props: any) {
           <Pressable
             onPress={() => setFavorite(!favorite)}
             style={{ flexDirection: "row", alignItems: "center", padding: 20 }}
+            testID="edit-vault-favorite-toggle"
+            accessibilityLabel={
+              favorite ? "Unmark as favorite" : "Mark as favorite"
+            }
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: favorite }}
           >
             <Ionicons
               name={favorite ? "star" : "star-outline"}
@@ -190,6 +219,9 @@ export function EditVaultCard(props: any) {
               { ...styles.saveButton, backgroundColor: theme.primary },
               pressed && styles.saveButtonPressed,
             ]}
+            testID="edit-vault-save-button"
+            accessibilityLabel="Save changes"
+            accessibilityRole="button"
           >
             <Text style={{ ...styles.saveButtonText, color: theme.card }}>
               Save Changes

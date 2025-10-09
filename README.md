@@ -21,7 +21,7 @@ It stores user credentials locally using strong encryption and biometric authent
 ## ⚙️ Tech Stack
 
 - **React Native** (Expo or CLI)
-- **Encrypted Storage** for local data
+- **Local Storage**
 - **TypeScript**
 
 ## 🚀 Summary

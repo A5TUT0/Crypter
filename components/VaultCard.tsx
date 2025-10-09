@@ -33,13 +33,17 @@ export function VaultCard({
   const theme = useTheme();
 
   return (
-    <View>
+    <View testID={`vault-card-${id || title}`}>
       {isCompactList ? null : <View style={{ height: 10 }} />}
 
       <Pressable
         onPress={onPress}
         style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1 }]}
         hitSlop={8}
+        testID={`vault-card-pressable-${id || title}`}
+        accessibilityLabel={`${title}, ${user}`}
+        accessibilityRole="button"
+        accessibilityHint="Tap to view vault entry details"
       >
         {isCompactList ? (
           <View

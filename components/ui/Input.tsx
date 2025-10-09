@@ -7,15 +7,17 @@ export function Input({
   placeHolderText,
   value,
   onChangeText,
+  testID,
 }: {
   placeHolderText: string;
   value?: string;
   onChangeText?: (text: string) => void;
+  testID?: string;
 }) {
   const [focused, setFocused] = useState(false);
   const theme = useTheme();
   return (
-    <View style={styles.rowWrapper}>
+    <View style={styles.rowWrapper} testID={testID}>
       <Text style={[styles.label, { color: theme.primary }]}>
         {placeHolderText}
       </Text>
@@ -33,6 +35,9 @@ export function Input({
           placeholderTextColor={theme.text + "99"}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
+          testID={testID ? `${testID}-input` : undefined}
+          accessibilityLabel={placeHolderText}
+          accessibilityHint={`Enter ${placeHolderText.toLowerCase()}`}
         />
       </View>
     </View>
@@ -42,10 +47,12 @@ export function InputPassword({
   value,
   onChangeText,
   placeHolderText,
+  testID,
 }: {
   value?: string;
   onChangeText?: (text: string) => void;
   placeHolderText: string;
+  testID?: string;
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const [focused, setFocused] = useState(false);
@@ -54,7 +61,7 @@ export function InputPassword({
     setIsVisible((v) => !v);
   }
   return (
-    <View style={styles.rowWrapper}>
+    <View style={styles.rowWrapper} testID={testID}>
       <Text style={[styles.label, { color: theme.primary }]}>
         {placeHolderText}
       </Text>
@@ -76,11 +83,17 @@ export function InputPassword({
           secureTextEntry={!isVisible}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
+          testID={testID ? `${testID}-input` : undefined}
+          accessibilityLabel={placeHolderText}
+          accessibilityHint="Enter password"
         />
         <Pressable
           onPress={toggleVisibility}
           style={styles.eyeButton}
           hitSlop={8}
+          testID={testID ? `${testID}-toggle-visibility` : undefined}
+          accessibilityLabel={isVisible ? "Hide password" : "Show password"}
+          accessibilityRole="button"
         >
           {isVisible ? (
             <AntDesign name="eye" size={18} color={theme.primary} />

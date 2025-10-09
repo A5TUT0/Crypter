@@ -79,11 +79,17 @@ export default function Details({ route, navigation }: any) {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.background }]}
+      testID="vault-details-container"
+    >
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation?.goBack()}
           style={[styles.backButton, { backgroundColor: theme.card }]}
+          testID="vault-details-back-button"
+          accessibilityLabel="Go back"
+          accessibilityRole="button"
         >
           <Feather name="arrow-left" size={22} color={theme.text} />
         </TouchableOpacity>
@@ -99,16 +105,30 @@ export default function Details({ route, navigation }: any) {
             shadowColor: theme.text,
           },
         ]}
+        testID="vault-details-card"
       >
         <Text style={[styles.label, { color: theme.primary }]}>Title</Text>
-        <Text style={[styles.value, { color: theme.text }]}>{name}</Text>
+        <Text
+          style={[styles.value, { color: theme.text }]}
+          testID="vault-details-title-text"
+        >
+          {name}
+        </Text>
         <Text style={[styles.label, { color: theme.primary }]}>
           Username / Email
         </Text>
-        <Text style={[styles.value, { color: theme.text }]}>{username}</Text>
+        <Text
+          style={[styles.value, { color: theme.text }]}
+          testID="vault-details-username-text"
+        >
+          {username}
+        </Text>
         <Text style={[styles.label, { color: theme.primary }]}>Password</Text>
         <View style={styles.row}>
-          <Text style={[styles.value, { flex: 1, color: theme.text }]}>
+          <Text
+            style={[styles.value, { flex: 1, color: theme.text }]}
+            testID="vault-details-password-text"
+          >
             {showPassword
               ? password
               : "\u2022".repeat(Math.max(8, password.length))}
@@ -116,6 +136,11 @@ export default function Details({ route, navigation }: any) {
           <Pressable
             onPress={() => setShowPassword((s) => !s)}
             style={[styles.iconButton, { backgroundColor: theme.card }]}
+            testID="vault-details-toggle-password-button"
+            accessibilityLabel={
+              showPassword ? "Hide password" : "Show password"
+            }
+            accessibilityRole="button"
           >
             <Feather
               name={showPassword ? "eye" : "eye-off"}
@@ -129,12 +154,20 @@ export default function Details({ route, navigation }: any) {
               styles.iconButton,
               { marginLeft: 8, backgroundColor: theme.card },
             ]}
+            testID="vault-details-copy-password-button"
+            accessibilityLabel="Copy password to clipboard"
+            accessibilityRole="button"
           >
             <Feather name="copy" size={24} color={theme.primary} />
           </Pressable>
         </View>
         <Text style={[styles.label, { color: theme.primary }]}>Website</Text>
-        <Pressable onPress={() => openWebsite(website)}>
+        <Pressable
+          onPress={() => openWebsite(website)}
+          testID="vault-details-website-link"
+          accessibilityLabel={`Open website ${website || "N/A"}`}
+          accessibilityRole="link"
+        >
           <Text style={[styles.value, styles.link, { color: theme.primary }]}>
             {website || "N/A"}
           </Text>
@@ -152,6 +185,9 @@ export default function Details({ route, navigation }: any) {
               navigation?.navigate("EditVaultCard", { entryId: entry?.id })
             }
             style={[styles.editButton, { backgroundColor: theme.primary }]}
+            testID="vault-details-edit-button"
+            accessibilityLabel="Edit entry"
+            accessibilityRole="button"
           >
             <MaterialIcons name="edit" size={20} color={theme.background} />
             <Text
@@ -196,6 +232,9 @@ export default function Details({ route, navigation }: any) {
               styles.editButton,
               { backgroundColor: theme.error, marginLeft: 10 },
             ]}
+            testID="vault-details-delete-button"
+            accessibilityLabel="Delete entry"
+            accessibilityRole="button"
           >
             <MaterialIcons name="delete" size={20} color={theme.background} />
             <Text

@@ -19,16 +19,19 @@ export function Favorites(props: any) {
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.background }]}
+      testID="favorites-screen"
+    >
       <View style={styles.titleWrap}>
         <Title title="Favorites" />
       </View>
       <View style={{ marginHorizontal: 10, marginBottom: 10 }}>
         <SearchBar onChangeText={setSearchQuery} value={searchQuery} />
       </View>
-      <ScrollView>
+      <ScrollView testID="favorites-scroll-view">
         {favorites.length === 0 ? (
-          <View style={styles.empty}>
+          <View style={styles.empty} testID="favorites-empty-state">
             <Text style={[styles.emptyText, { color: theme.text }]}>
               No favorites yet
             </Text>
@@ -37,6 +40,7 @@ export function Favorites(props: any) {
           favorites.map((entry: Entry) => (
             <View key={entry.id}>
               <VaultCard
+                id={entry.id}
                 title={entry.name}
                 user={entry.username}
                 website={entry.website}

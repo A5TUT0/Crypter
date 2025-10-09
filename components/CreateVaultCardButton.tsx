@@ -27,6 +27,10 @@ export default function CreateVaultCardButton({
             elevation: 5,
           },
         ]}
+        testID="create-vault-fab-button"
+        accessibilityLabel="Create new vault entry"
+        accessibilityRole="button"
+        accessibilityHint="Opens form to create a new vault entry"
       >
         <AntDesign name="plus" size={24} color={theme.card} />
       </Pressable>

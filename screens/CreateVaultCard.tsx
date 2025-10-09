@@ -58,23 +58,35 @@ export default function CreateVaultCard(props: any) {
   }
 
   return (
-    <ScrollView style={{ backgroundColor: theme.background }}>
+    <ScrollView
+      style={{ backgroundColor: theme.background }}
+      testID="create-vault-scroll"
+    >
       <View style={{ flex: 1, paddingTop: 50, paddingBottom: 100 }}>
         <View style={{ position: "relative", alignItems: "center" }}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={{ position: "absolute", left: 10, top: 0, zIndex: 10 }}
+            testID="create-vault-back-button"
+            accessibilityLabel="Go back"
+            accessibilityRole="button"
           >
             <Ionicons name="arrow-back" size={34} color={theme.text} />
           </TouchableOpacity>
           <Title title="Create Login" />
         </View>
         <View>
-          <Input placeHolderText="Title*" value={name} onChangeText={setName} />
+          <Input
+            placeHolderText="Title*"
+            value={name}
+            onChangeText={setName}
+            testID="create-vault-name-input"
+          />
           <Input
             placeHolderText="Username or Email*"
             value={username}
             onChangeText={setUsername}
+            testID="create-vault-username-input"
           />
           <Pressable
             onPress={() => checkEmailBreach(username)}
@@ -83,6 +95,9 @@ export default function CreateVaultCard(props: any) {
               paddingRight: 20,
               marginBottom: 10,
             }}
+            testID="create-vault-check-breach-button"
+            accessibilityLabel="Check if email is pwned"
+            accessibilityRole="button"
           >
             <Text style={{ color: theme.primary, fontWeight: "600" }}>
               Check if email is pwned
@@ -92,6 +107,7 @@ export default function CreateVaultCard(props: any) {
             value={password}
             onChangeText={setPassword}
             placeHolderText="Password*"
+            testID="create-vault-password-input"
           />
           <Pressable
             onPress={generatePassword}
@@ -100,6 +116,9 @@ export default function CreateVaultCard(props: any) {
               paddingRight: 20,
               marginBottom: 10,
             }}
+            testID="create-vault-generate-password-button"
+            accessibilityLabel="Generate random password"
+            accessibilityRole="button"
           >
             <Text style={{ color: theme.primary, fontWeight: "600" }}>
               Generate Password
@@ -109,6 +128,7 @@ export default function CreateVaultCard(props: any) {
             placeHolderText="Website"
             value={website}
             onChangeText={setWebsite}
+            testID="create-vault-website-input"
           />
           <Text
             style={{
@@ -123,6 +143,12 @@ export default function CreateVaultCard(props: any) {
           <Pressable
             onPress={() => setFavorite(!favorite)}
             style={{ flexDirection: "row", alignItems: "center", padding: 20 }}
+            testID="create-vault-favorite-toggle"
+            accessibilityLabel={
+              favorite ? "Unmark as favorite" : "Mark as favorite"
+            }
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: favorite }}
           >
             <Ionicons
               name={favorite ? "star" : "star-outline"}
@@ -141,6 +167,9 @@ export default function CreateVaultCard(props: any) {
               { ...styles.createButton, backgroundColor: theme.primary },
               pressed && styles.createButtonPressed,
             ]}
+            testID="create-vault-save-button"
+            accessibilityLabel="Create vault entry"
+            accessibilityRole="button"
           >
             <Text style={{ ...styles.createButtonText, color: theme.card }}>
               Create
