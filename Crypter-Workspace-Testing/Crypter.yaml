@@ -1,0 +1,22 @@
+appId: crypter.luan.world
+tags:
+  - E2E Test
+---
+- launchApp:
+    clearState: true
+- tapOn: , Vaults
+- tapOn: 
+- tapOn:
+    point: 3%,19%
+- inputText: Hello World
+- tapOn:
+    point: 3%,31%
+- inputText: Hello World
+- tapOn:
+    point: 3%,45%
+- inputText: Hello World
+- tapOn:
+    point: 3%,60%
+- inputText: Google.com
+- tapOn: 
+- tapOn: Create
