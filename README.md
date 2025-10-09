@@ -5,7 +5,7 @@ It stores user credentials locally using strong encryption and biometric authent
 
 ## ✨ Features
 
-- Local encrypted password storage (AES-256 + Android Keystore / iOS Keychain)
+- Local Saved but not encrypted
 - Password leak check using **Have I Been Pwned**
 - Random password generation
 - Email breach verification
@@ -13,11 +13,10 @@ It stores user credentials locally using strong encryption and biometric authent
 
 ## 🌐 APIs Used
 
-| Purpose               | API                                                      | Description                                            |
-| --------------------- | -------------------------------------------------------- | ------------------------------------------------------ |
-| Email breach checker  | [XposedOrNot](https://xposedornot.com/api_doc)           | Check if an email has appeared in public data breaches |
-| Password leak checker | [Pwned Passwords](https://api.pwnedpasswords.com/range/) | Verify if a password has been compromised              |
-| Password generator    | [PasswordWolf](https://passwordwolf.com/api/)            | Generate random, strong passwords                      |
+| Purpose              | API                                            | Description                                            |
+| -------------------- | ---------------------------------------------- | ------------------------------------------------------ |
+| Email breach checker | [XposedOrNot](https://xposedornot.com/api_doc) | Check if an email has appeared in public data breaches |
+| Password generator   | [PasswordWolf](https://passwordwolf.com/api/)  | Generate random, strong passwords                      |
 
 ## ⚙️ Tech Stack
 
