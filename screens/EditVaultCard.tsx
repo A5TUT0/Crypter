@@ -7,6 +7,10 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { useTheme } from "../contexts/ThemeContext";
 import Title from "../components/ui/Title";
@@ -89,147 +93,168 @@ export function EditVaultCard(props: any) {
   }
 
   return (
-    <ScrollView
-      style={{ backgroundColor: theme.background }}
-      testID="edit-vault-scroll"
+    <KeyboardAvoidingView
+      style={{ flex: 1, backgroundColor: theme.background }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 80}
     >
-      <View style={{ flex: 1, paddingTop: 50, paddingBottom: 100 }}>
-        <View style={{ position: "relative", alignItems: "center" }}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={{ position: "absolute", left: 10, top: 0, zIndex: 10 }}
-            testID="edit-vault-back-button"
-            accessibilityLabel="Go back"
-            accessibilityRole="button"
-          >
-            <Ionicons name="arrow-back" size={34} color={theme.text} />
-          </TouchableOpacity>
-          <Title title="Edit Login" />
-        </View>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingTop: 50,
+            paddingBottom: 100,
+            backgroundColor: theme.background,
+          }}
+          keyboardShouldPersistTaps="handled"
+          testID="edit-vault-scroll"
+        >
+          <View style={{ flex: 1 }}>
+            <View style={{ position: "relative", alignItems: "center" }}>
+              <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                style={{ position: "absolute", left: 10, top: 0, zIndex: 10 }}
+                testID="edit-vault-back-button"
+                accessibilityLabel="Go back"
+                accessibilityRole="button"
+              >
+                <Ionicons name="arrow-back" size={34} color={theme.text} />
+              </TouchableOpacity>
+              <Title title="Edit Login" />
+            </View>
 
-        {/* Preview del favicon actual */}
-        {website && (
-          <View
-            style={{ alignItems: "center", marginVertical: 20 }}
-            testID="edit-vault-favicon-preview"
-          >
-            <FaviconImage domain={website} size={80} borderRadius={20} />
-            <Text
-              style={{
-                color: theme.text,
-                opacity: 0.6,
-                marginTop: 8,
-                fontSize: 12,
-              }}
-            >
-              Current favicon
-            </Text>
+            {/* Preview del favicon actual */}
+            {website && (
+              <View
+                style={{ alignItems: "center", marginVertical: 20 }}
+                testID="edit-vault-favicon-preview"
+              >
+                <FaviconImage domain={website} size={80} borderRadius={20} />
+                <Text
+                  style={{
+                    color: theme.text,
+                    opacity: 0.6,
+                    marginTop: 8,
+                    fontSize: 12,
+                  }}
+                >
+                  Current favicon
+                </Text>
+              </View>
+            )}
+
+            <View>
+              <Input
+                placeHolderText="Title*"
+                value={name}
+                onChangeText={setName}
+                testID="edit-vault-name-input"
+              />
+              <Input
+                placeHolderText="Username or Email*"
+                value={username}
+                onChangeText={setUsername}
+                testID="edit-vault-username-input"
+              />
+              <Pressable
+                onPress={() => checkEmailBreach(username)}
+                style={{
+                  alignItems: "flex-end",
+                  paddingRight: 20,
+                  marginBottom: 10,
+                }}
+                testID="edit-vault-check-breach-button"
+                accessibilityLabel="Check if email is pwned"
+                accessibilityRole="button"
+              >
+                <Text style={{ color: theme.primary, fontWeight: "600" }}>
+                  Check if email is pwned
+                </Text>
+              </Pressable>
+              <InputPassword
+                value={password}
+                onChangeText={setPassword}
+                placeHolderText="Password*"
+                testID="edit-vault-password-input"
+              />
+              <Pressable
+                onPress={generatePassword}
+                style={{
+                  alignItems: "flex-end",
+                  paddingRight: 20,
+                  marginBottom: 10,
+                }}
+                testID="edit-vault-generate-password-button"
+                accessibilityLabel="Generate random password"
+                accessibilityRole="button"
+              >
+                <Text style={{ color: theme.primary, fontWeight: "600" }}>
+                  Generate Password
+                </Text>
+              </Pressable>
+              <Input
+                placeHolderText="Website"
+                value={website}
+                onChangeText={setWebsite}
+                testID="edit-vault-website-input"
+              />
+              <Text
+                style={{
+                  marginLeft: 20,
+                  marginTop: 10,
+                  color: theme.text,
+                  opacity: 0.7,
+                }}
+              >
+                Without http:// or https://
+              </Text>
+              <Pressable
+                onPress={() => setFavorite(!favorite)}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  padding: 20,
+                }}
+                testID="edit-vault-favorite-toggle"
+                accessibilityLabel={
+                  favorite ? "Unmark as favorite" : "Mark as favorite"
+                }
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: favorite }}
+              >
+                <Ionicons
+                  name={favorite ? "star" : "star-outline"}
+                  size={24}
+                  color={favorite ? theme.primary : theme.text}
+                />
+                <Text
+                  style={{ marginLeft: 10, fontSize: 16, color: theme.text }}
+                >
+                  {favorite ? "Unmark Favorite" : "Mark as Favorite"}
+                </Text>
+              </Pressable>
+            </View>
+            <View style={{ padding: 20 }}>
+              <Pressable
+                onPress={saveEntry}
+                style={({ pressed }) => [
+                  { ...styles.saveButton, backgroundColor: theme.primary },
+                  pressed && styles.saveButtonPressed,
+                ]}
+                testID="edit-vault-save-button"
+                accessibilityLabel="Save changes"
+                accessibilityRole="button"
+              >
+                <Text style={{ ...styles.saveButtonText, color: theme.card }}>
+                  Save Changes
+                </Text>
+              </Pressable>
+            </View>
           </View>
-        )}
-
-        <View>
-          <Input
-            placeHolderText="Title*"
-            value={name}
-            onChangeText={setName}
-            testID="edit-vault-name-input"
-          />
-          <Input
-            placeHolderText="Username or Email*"
-            value={username}
-            onChangeText={setUsername}
-            testID="edit-vault-username-input"
-          />
-          <Pressable
-            onPress={() => checkEmailBreach(username)}
-            style={{
-              alignItems: "flex-end",
-              paddingRight: 20,
-              marginBottom: 10,
-            }}
-            testID="edit-vault-check-breach-button"
-            accessibilityLabel="Check if email is pwned"
-            accessibilityRole="button"
-          >
-            <Text style={{ color: theme.primary, fontWeight: "600" }}>
-              Check if email is pwned
-            </Text>
-          </Pressable>
-          <InputPassword
-            value={password}
-            onChangeText={setPassword}
-            placeHolderText="Password*"
-            testID="edit-vault-password-input"
-          />
-          <Pressable
-            onPress={generatePassword}
-            style={{
-              alignItems: "flex-end",
-              paddingRight: 20,
-              marginBottom: 10,
-            }}
-            testID="edit-vault-generate-password-button"
-            accessibilityLabel="Generate random password"
-            accessibilityRole="button"
-          >
-            <Text style={{ color: theme.primary, fontWeight: "600" }}>
-              Generate Password
-            </Text>
-          </Pressable>
-          <Input
-            placeHolderText="Website"
-            value={website}
-            onChangeText={setWebsite}
-            testID="edit-vault-website-input"
-          />
-          <Text
-            style={{
-              marginLeft: 20,
-              marginTop: 10,
-              color: theme.text,
-              opacity: 0.7,
-            }}
-          >
-            Without http:// or https://
-          </Text>
-          <Pressable
-            onPress={() => setFavorite(!favorite)}
-            style={{ flexDirection: "row", alignItems: "center", padding: 20 }}
-            testID="edit-vault-favorite-toggle"
-            accessibilityLabel={
-              favorite ? "Unmark as favorite" : "Mark as favorite"
-            }
-            accessibilityRole="checkbox"
-            accessibilityState={{ checked: favorite }}
-          >
-            <Ionicons
-              name={favorite ? "star" : "star-outline"}
-              size={24}
-              color={favorite ? theme.primary : theme.text}
-            />
-            <Text style={{ marginLeft: 10, fontSize: 16, color: theme.text }}>
-              {favorite ? "Unmark Favorite" : "Mark as Favorite"}
-            </Text>
-          </Pressable>
-        </View>
-        <View style={{ padding: 20 }}>
-          <Pressable
-            onPress={saveEntry}
-            style={({ pressed }) => [
-              { ...styles.saveButton, backgroundColor: theme.primary },
-              pressed && styles.saveButtonPressed,
-            ]}
-            testID="edit-vault-save-button"
-            accessibilityLabel="Save changes"
-            accessibilityRole="button"
-          >
-            <Text style={{ ...styles.saveButtonText, color: theme.card }}>
-              Save Changes
-            </Text>
-          </Pressable>
-        </View>
-      </View>
-    </ScrollView>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
