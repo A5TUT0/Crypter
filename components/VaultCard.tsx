@@ -1,20 +1,21 @@
-import { Pressable, Image, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useTheme } from "../contexts/ThemeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
+import FaviconImage from "./FaviconImage";
 
 export function VaultCard({
   id,
   title,
   user,
-  logo,
+  website,
   onPress,
 }: {
   id?: string;
   title: string;
   user: string;
-  logo: any;
+  website?: string;
   onPress?: () => void;
 }) {
   const [isCompactList, setIsCompactList] = useState(false);
@@ -92,19 +93,7 @@ export function VaultCard({
               backgroundColor: theme.card,
             }}
           >
-            <View
-              style={{
-                width: 50,
-                height: 50,
-                borderRadius: 15,
-                overflow: "hidden",
-                backgroundColor: theme.background,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Image source={logo} style={{ width: 50, height: 50 }} />
-            </View>
+            <FaviconImage domain={website} size={50} borderRadius={15} />
 
             <View style={{ flex: 1, marginLeft: 20 }}>
               <Text

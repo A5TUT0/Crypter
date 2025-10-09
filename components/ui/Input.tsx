@@ -41,9 +41,11 @@ export function Input({
 export function InputPassword({
   value,
   onChangeText,
+  placeHolderText,
 }: {
   value?: string;
   onChangeText?: (text: string) => void;
+  placeHolderText: string;
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const [focused, setFocused] = useState(false);
@@ -53,7 +55,9 @@ export function InputPassword({
   }
   return (
     <View style={styles.rowWrapper}>
-      <Text style={[styles.label, { color: theme.primary }]}>Password</Text>
+      <Text style={[styles.label, { color: theme.primary }]}>
+        {placeHolderText}
+      </Text>
       <View
         style={[
           styles.underlineWrapper,

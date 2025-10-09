@@ -23,7 +23,16 @@ export default function CreateVaultCard(props: any) {
   const [password, setPassword] = useState("");
   const [website, setWebsite] = useState("");
   const [favorite, setFavorite] = useState(false);
+  
   async function saveEntry() {
+    if (
+      name.trim() === "" ||
+      password.trim() === "" ||
+      username.trim() === ""
+    ) {
+      Alert.alert("Error", "Please fill in all required fields");
+      return;
+    }
     try {
       const existing = await AsyncStorage.getItem("vault_entries");
       const arr = existing ? JSON.parse(existing) : [];
@@ -109,9 +118,9 @@ export default function CreateVaultCard(props: any) {
         </TouchableOpacity>
         <Title title="Create Login" />
         <View>
-          <Input placeHolderText="Title" value={name} onChangeText={setName} />
+          <Input placeHolderText="Title*" value={name} onChangeText={setName} />
           <Input
-            placeHolderText="Username or Email"
+            placeHolderText="Username or Email*"
             value={username}
             onChangeText={setUsername}
           />
@@ -127,7 +136,11 @@ export default function CreateVaultCard(props: any) {
               Check if email is pwned
             </Text>
           </Pressable>
-          <InputPassword value={password} onChangeText={setPassword} />
+          <InputPassword
+            value={password}
+            onChangeText={setPassword}
+            placeHolderText="Password*"
+          />
           <Pressable
             onPress={createRandomPassword}
             style={{

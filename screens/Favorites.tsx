@@ -39,7 +39,7 @@ export function Favorites(props: any) {
               <VaultCard
                 title={entry.name}
                 user={entry.username}
-                logo={require("../assets/icon.png")}
+                website={entry.website}
                 onPress={() =>
                   navigation.navigate("VaultCardDetails", { entryId: entry.id })
                 }
