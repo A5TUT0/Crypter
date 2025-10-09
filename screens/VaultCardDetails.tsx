@@ -15,6 +15,7 @@ import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Feather from "@expo/vector-icons/Feather";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import FaviconImage from "../components/FaviconImage";
 
 type Entry = {
   id: string;
@@ -101,12 +102,10 @@ export default function Details({ route, navigation }: any) {
       >
         <Text style={[styles.label, { color: theme.primary }]}>Title</Text>
         <Text style={[styles.value, { color: theme.text }]}>{name}</Text>
-
         <Text style={[styles.label, { color: theme.primary }]}>
           Username / Email
         </Text>
         <Text style={[styles.value, { color: theme.text }]}>{username}</Text>
-
         <Text style={[styles.label, { color: theme.primary }]}>Password</Text>
         <View style={styles.row}>
           <Text style={[styles.value, { flex: 1, color: theme.text }]}>
@@ -134,13 +133,82 @@ export default function Details({ route, navigation }: any) {
             <Feather name="copy" size={24} color={theme.primary} />
           </Pressable>
         </View>
-
         <Text style={[styles.label, { color: theme.primary }]}>Website</Text>
         <Pressable onPress={() => openWebsite(website)}>
           <Text style={[styles.value, styles.link, { color: theme.primary }]}>
             {website || "N/A"}
           </Text>
         </Pressable>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            marginBottom: 5,
+          }}
+        >
+          <TouchableOpacity
+            onPress={() =>
+              navigation?.navigate("EditVaultCard", { entryId: entry?.id })
+            }
+            style={[styles.editButton, { backgroundColor: theme.primary }]}
+          >
+            <MaterialIcons name="edit" size={20} color={theme.background} />
+            <Text
+              style={{
+                color: theme.background,
+                fontWeight: "600",
+                marginLeft: 6,
+              }}
+            >
+              Edit
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              Alert.alert(
+                "Delete Entry",
+                "Are you sure you want to delete this entry? This action cannot be undone.",
+                [
+                  { text: "Cancel", style: "cancel" },
+                  {
+                    text: "Delete",
+                    style: "destructive",
+                    onPress: async () => {
+                      if (!entry) return;
+                      const filtered = entries.filter((e) => e.id !== entry.id);
+                      try {
+                        await AsyncStorage.setItem(
+                          "vault_entries",
+                          JSON.stringify(filtered)
+                        );
+                        setEntries(filtered);
+                        navigation?.navigate("Vault");
+                      } catch (e) {
+                        Alert.alert("Error", "Could not delete entry");
+                      }
+                    },
+                  },
+                ]
+              )
+            }
+            style={[
+              styles.editButton,
+              { backgroundColor: theme.error, marginLeft: 10 },
+            ]}
+          >
+            <MaterialIcons name="delete" size={20} color={theme.background} />
+            <Text
+              style={{
+                color: theme.background,
+                fontWeight: "600",
+                marginLeft: 6,
+              }}
+            >
+              Delete
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -180,5 +248,17 @@ const styles = StyleSheet.create({
   value: { fontSize: 16, marginTop: 6 },
   row: { flexDirection: "row", alignItems: "center", marginTop: 6 },
   iconButton: { padding: 6, borderRadius: 6 },
+  editButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 3,
+  },
   link: { textDecorationLine: "underline" },
 });

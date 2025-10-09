@@ -9,6 +9,7 @@ import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import Details from "./screens/VaultCardDetails";
 import { Favorites } from "./screens/Favorites";
 import Settings from "./screens/Settings";
+import { EditVaultCard } from "./screens/EditVaultCard";
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,7 @@ export default function App() {
               <Stack.Screen name="CreateVault" component={CreateVaultCard} />
               <Stack.Screen name="VaultCardDetails" component={Details} />
               <Stack.Screen name="Settings" component={Settings} />
+              <Stack.Screen name="EditVaultCard" component={EditVaultCard} />
             </Stack.Navigator>
 
             <NavBar />

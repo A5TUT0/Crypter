@@ -1,23 +1,28 @@
+import React, { useState, useEffect } from "react";
 import {
   View,
-  Alert,
-  Pressable,
   Text,
-  StyleSheet,
+  Pressable,
   TouchableOpacity,
+  StyleSheet,
   ScrollView,
+  Alert,
 } from "react-native";
 import { useTheme } from "../contexts/ThemeContext";
 import Title from "../components/ui/Title";
 import { Input, InputPassword } from "../components/ui/Input";
-import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useVaultEntries, Entry } from "../hooks/AsyncStorage";
+import FaviconImage from "../components/FaviconImage";
 import { checkEmailBreach, validateRequiredFields } from "../utils/vaultUtils";
 import { usePasswordGenerator } from "../hooks/usePasswordGenerator";
 
-export default function CreateVaultCard(props: any) {
+export function EditVaultCard(props: any) {
+  const { entryId } = props.route.params;
   const { navigation } = props;
+  const entries = useVaultEntries();
+  const entry = entries.find((e: Entry) => e.id === entryId);
   const theme = useTheme();
 
   const [name, setName] = useState("");
@@ -28,6 +33,16 @@ export default function CreateVaultCard(props: any) {
 
   const { generatePassword } = usePasswordGenerator(setPassword);
 
+  useEffect(() => {
+    if (entry) {
+      setName(entry.name || "");
+      setUsername(entry.username || "");
+      setPassword(entry.password || "");
+      setWebsite(entry.website || "");
+      setFavorite(entry.favorite || false);
+    }
+  }, [entry]);
+
   async function saveEntry() {
     if (!validateRequiredFields(name, username, password)) {
       return;
@@ -35,26 +50,42 @@ export default function CreateVaultCard(props: any) {
     try {
       const existing = await AsyncStorage.getItem("vault_entries");
       const arr = existing ? JSON.parse(existing) : [];
-      const newEntry = {
-        id: Date.now().toString(),
+      const updatedEntry = {
+        id: entryId,
         name,
         username,
         password,
         website,
         favorite,
       };
-      arr.push(newEntry);
-      await AsyncStorage.setItem("vault_entries", JSON.stringify(arr));
-      Alert.alert("Saved", "Vault entry saved successfully");
-      setName("");
-      setUsername("");
-      setPassword("");
-      setWebsite("");
-      navigation.navigate("Vault");
+      const index = arr.findIndex((e: Entry) => e.id === entryId);
+      if (index !== -1) {
+        arr[index] = updatedEntry;
+        await AsyncStorage.setItem("vault_entries", JSON.stringify(arr));
+        Alert.alert("Saved", "Vault entry updated successfully");
+        navigation.navigate("Vault");
+      } else {
+        Alert.alert("Error", "Entry not found");
+      }
     } catch (e) {
       console.error("Error saving entry", e);
       Alert.alert("Error", "Could not save entry");
     }
+  }
+
+  if (!entry) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: theme.background,
+        }}
+      >
+        <Text style={{ color: theme.text, fontSize: 16 }}>Entry not found</Text>
+      </View>
+    );
   }
 
   return (
@@ -67,8 +98,26 @@ export default function CreateVaultCard(props: any) {
           >
             <Ionicons name="arrow-back" size={34} color={theme.text} />
           </TouchableOpacity>
-          <Title title="Create Login" />
+          <Title title="Edit Login" />
         </View>
+
+        {/* Preview del favicon actual */}
+        {website && (
+          <View style={{ alignItems: "center", marginVertical: 20 }}>
+            <FaviconImage domain={website} size={80} borderRadius={20} />
+            <Text
+              style={{
+                color: theme.text,
+                opacity: 0.6,
+                marginTop: 8,
+                fontSize: 12,
+              }}
+            >
+              Current favicon
+            </Text>
+          </View>
+        )}
+
         <View>
           <Input placeHolderText="Title*" value={name} onChangeText={setName} />
           <Input
@@ -118,7 +167,7 @@ export default function CreateVaultCard(props: any) {
               opacity: 0.7,
             }}
           >
-            With out http:// or https://
+            Without http:// or https://
           </Text>
           <Pressable
             onPress={() => setFavorite(!favorite)}
@@ -138,12 +187,12 @@ export default function CreateVaultCard(props: any) {
           <Pressable
             onPress={saveEntry}
             style={({ pressed }) => [
-              { ...styles.createButton, backgroundColor: theme.primary },
-              pressed && styles.createButtonPressed,
+              { ...styles.saveButton, backgroundColor: theme.primary },
+              pressed && styles.saveButtonPressed,
             ]}
           >
-            <Text style={{ ...styles.createButtonText, color: theme.card }}>
-              Create
+            <Text style={{ ...styles.saveButtonText, color: theme.card }}>
+              Save Changes
             </Text>
           </Pressable>
         </View>
@@ -153,7 +202,7 @@ export default function CreateVaultCard(props: any) {
 }
 
 const styles = StyleSheet.create({
-  createButton: {
+  saveButton: {
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 12,
@@ -165,10 +214,10 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 6,
   },
-  createButtonPressed: {
+  saveButtonPressed: {
     transform: [{ scale: 0.995 }],
   },
-  createButtonText: {
+  saveButtonText: {
     fontWeight: "700",
     fontSize: 16,
   },
