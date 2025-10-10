@@ -2,21 +2,36 @@ appId: crypter.luan.world
 tags:
   - E2E Test
 ---
-- launchApp:
-    clearState: true
+#- launchApp:
+#    clearState: true
 - tapOn: , Vaults
 - tapOn: 
 - tapOn:
     point: 3%,19%
-- inputText: Hello World
+- inputText: Google
 - tapOn:
-    point: 3%,31%
-- inputText: Hello World
+    text: Username or Email*
+    index: 1
+- inputText: example@example.com
 - tapOn:
-    point: 3%,45%
-- inputText: Hello World
+    text: Password*
+    index: 1
+- inputText: PASSWORD1234
+- tapOn: Show password
+- assertVisible: PASSWORD1234
+- tapOn: Hide password
+- assertVisible: ••••••••••••
+- scrollUntilVisible:
+    element: Website
 - tapOn:
-    point: 3%,60%
+    text: Website
+    index: 1
 - inputText: Google.com
 - tapOn: 
-- tapOn: Create
+- scrollUntilVisible:
+    element: Create vault entry
+- tapOn: Create vault entry
+- assertVisible: OK
+- tapOn: OK
+- assertVisible: Google
+- assertVisible: example@example.com

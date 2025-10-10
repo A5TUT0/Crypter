@@ -1,7 +1,7 @@
-import { Pressable, TextInput, View, StyleSheet, Text } from "react-native";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import { useState } from "react";
-import { useTheme } from "../../contexts/ThemeContext";
+import { Pressable, TextInput, View, StyleSheet, Text } from 'react-native';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { useState } from 'react';
+import { useTheme } from '../../contexts/ThemeContext';
 
 export function Input({
   placeHolderText,
@@ -18,9 +18,7 @@ export function Input({
   const theme = useTheme();
   return (
     <View style={styles.rowWrapper} testID={testID}>
-      <Text style={[styles.label, { color: theme.primary }]}>
-        {placeHolderText}
-      </Text>
+      <Text style={[styles.label, { color: theme.primary }]}>{placeHolderText}</Text>
       <View
         style={[
           styles.underlineWrapper,
@@ -31,8 +29,8 @@ export function Input({
           value={value}
           onChangeText={onChangeText}
           style={[styles.textInputInline, { color: theme.text }]}
-          placeholder={value ? undefined : ""}
-          placeholderTextColor={theme.text + "99"}
+          placeholder={value ? undefined : ''}
+          placeholderTextColor={theme.text + '99'}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           testID={testID ? `${testID}-input` : undefined}
@@ -62,9 +60,7 @@ export function InputPassword({
   }
   return (
     <View style={styles.rowWrapper} testID={testID}>
-      <Text style={[styles.label, { color: theme.primary }]}>
-        {placeHolderText}
-      </Text>
+      <Text style={[styles.label, { color: theme.primary }]}>{placeHolderText}</Text>
       <View
         style={[
           styles.underlineWrapper,
@@ -74,12 +70,9 @@ export function InputPassword({
         <TextInput
           value={value}
           onChangeText={onChangeText}
-          style={[
-            styles.textInputInline,
-            { paddingRight: 48, color: theme.text },
-          ]}
-          placeholder={value ? undefined : ""}
-          placeholderTextColor={theme.text + "99"}
+          style={[styles.textInputInline, { paddingRight: 48, color: theme.text }]}
+          placeholder={value ? undefined : ''}
+          placeholderTextColor={theme.text + '99'}
           secureTextEntry={!isVisible}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
@@ -92,7 +85,7 @@ export function InputPassword({
           style={styles.eyeButton}
           hitSlop={8}
           testID={testID ? `${testID}-toggle-visibility` : undefined}
-          accessibilityLabel={isVisible ? "Hide password" : "Show password"}
+          accessibilityLabel={isVisible ? 'Hide password' : 'Show password'}
           accessibilityRole="button"
         >
           {isVisible ? (
@@ -115,12 +108,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginBottom: 6,
     marginLeft: 4,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   underlineWrapper: {
     borderBottomWidth: 1,
     paddingBottom: 10,
-    position: "relative",
+    position: 'relative',
   },
   textInputInline: {
     height: 56,
@@ -128,9 +121,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   eyeButton: {
-    position: "absolute",
+    position: 'absolute',
     right: 0,
-    top: "50%",
+    top: '50%',
     transform: [{ translateY: -9 }],
     padding: 6,
   },

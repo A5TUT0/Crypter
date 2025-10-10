@@ -1,10 +1,8 @@
-import { useEffect } from "react";
-import ShakeDetector from "../components/ShakeDetector";
-import { fetchRandomPassword } from "../utils/vaultUtils";
+import { useEffect } from 'react';
+import ShakeDetector from '../components/ShakeDetector';
+import { fetchRandomPassword } from '../utils/vaultUtils';
 
-export const usePasswordGenerator = (
-  setPassword: (password: string) => void
-) => {
+export const usePasswordGenerator = (setPassword: (password: string) => void) => {
   const generatePassword = async () => {
     const pwd = await fetchRandomPassword();
     if (pwd) {

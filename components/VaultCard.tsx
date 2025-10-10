@@ -1,9 +1,9 @@
-import { Pressable, Text, View } from "react-native";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useTheme } from "../contexts/ThemeContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState } from "react";
-import FaviconImage from "./FaviconImage";
+import { Pressable, Text, View } from 'react-native';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useTheme } from '../contexts/ThemeContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';
+import FaviconImage from './FaviconImage';
 
 export function VaultCard({
   id,
@@ -23,8 +23,8 @@ export function VaultCard({
   useEffect(() => {
     const fetchCompactListSetting = async () => {
       try {
-        const compact = await AsyncStorage.getItem("settings_compactList");
-        setIsCompactList(compact === "1");
+        const compact = await AsyncStorage.getItem('settings_compactList');
+        setIsCompactList(compact === '1');
       } catch {}
     };
     fetchCompactListSetting();
@@ -48,8 +48,8 @@ export function VaultCard({
         {isCompactList ? (
           <View
             style={{
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               paddingVertical: 10,
               paddingHorizontal: 14,
               marginHorizontal: 10,
@@ -63,7 +63,7 @@ export function VaultCard({
                 numberOfLines={1}
                 style={{
                   fontSize: 16,
-                  fontWeight: "600",
+                  fontWeight: '600',
                   color: theme.text,
                 }}
               >
@@ -89,8 +89,8 @@ export function VaultCard({
         ) : (
           <View
             style={{
-              flexDirection: "row",
-              alignItems: "center",
+              flexDirection: 'row',
+              alignItems: 'center',
               padding: 20,
               margin: 10,
               borderRadius: 10,
@@ -103,7 +103,7 @@ export function VaultCard({
               <Text
                 style={{
                   fontSize: 20,
-                  fontWeight: "bold",
+                  fontWeight: 'bold',
                   color: theme.text,
                 }}
                 numberOfLines={1}

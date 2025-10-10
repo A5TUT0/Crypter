@@ -1,0 +1,35 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2021": true,
+    "commonjs": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module"
+  },
+  "extends": ["eslint:recommended"],
+  "ignorePatterns": ["node_modules/", "dist/", "build/"],
+  "rules": {
+    // require === and !==
+    "eqeqeq": ["error", "always"],
+    // require braces for multiline blocks
+    "curly": ["error", "multi-line"],
+    // warn on unused variables (but allow ignoring unused function args)
+    "no-unused-vars": ["warn", { "args": "none", "ignoreRestSiblings": true }],
+    // prevent use of undeclared variables
+    "no-undef": "error",
+    // allow console by default (useful for scripts / apps)
+    "no-console": "off",
+    // prefer const when variables are not reassigned
+    "prefer-const": ["error", { "destructuring": "all" }],
+    // disallow var
+    "no-var": "error",
+    // enforce consistent return
+    "consistent-return": "error",
+    // treat var-like usage as block scoped
+    "block-scoped-var": "error"
+  }
+}

@@ -1,5 +1,5 @@
-import { View, Text } from "react-native";
-import { useTheme } from "../../contexts/ThemeContext";
+import { View, Text } from 'react-native';
+import { useTheme } from '../../contexts/ThemeContext';
 
 export default function Title({ title }: { title: string }) {
   const theme = useTheme();
@@ -8,8 +8,8 @@ export default function Title({ title }: { title: string }) {
       <Text
         style={{
           fontSize: 34,
-          fontWeight: "bold",
-          textAlign: "center",
+          fontWeight: 'bold',
+          textAlign: 'center',
           margin: 10,
           color: theme.text,
         }}

@@ -7,15 +7,15 @@ import {
   Alert,
   Pressable,
   Platform,
-} from "react-native";
-import { ToastAndroid } from "react-native";
-import * as Clipboard from "expo-clipboard";
-import { useTheme } from "../contexts/ThemeContext";
-import React, { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Feather from "@expo/vector-icons/Feather";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import FaviconImage from "../components/FaviconImage";
+} from 'react-native';
+import { ToastAndroid } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
+import { useTheme } from '../contexts/ThemeContext';
+import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Feather from '@expo/vector-icons/Feather';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import FaviconImage from '../components/FaviconImage';
 
 type Entry = {
   id: string;
@@ -33,7 +33,7 @@ export default function Details({ route, navigation }: any) {
   useEffect(() => {
     const load = async () => {
       try {
-        const raw = await AsyncStorage.getItem("vault_entries");
+        const raw = await AsyncStorage.getItem('vault_entries');
         if (raw) {
           const parsed = JSON.parse(raw) as Entry[];
           setEntries(parsed);
@@ -41,7 +41,7 @@ export default function Details({ route, navigation }: any) {
           setEntries([]);
         }
       } catch (e) {
-        console.error("Failed to load vault entries", e);
+        console.error('Failed to load vault entries', e);
         setEntries([]);
       }
     };
@@ -49,32 +49,32 @@ export default function Details({ route, navigation }: any) {
   }, []);
   const entry = entries.find((e) => e.id === route.params.entryId);
   // Defensive: if entry not found, show fallback values
-  const name = entry ? entry.name : "N/A";
-  const username = entry ? entry.username : "N/A";
-  const password = entry ? entry.password : "";
-  const website = entry ? entry.website : "";
+  const name = entry ? entry.name : 'N/A';
+  const username = entry ? entry.username : 'N/A';
+  const password = entry ? entry.password : '';
+  const website = entry ? entry.website : '';
 
   function openWebsite(url?: string) {
     if (!url) return;
-    const link = url.startsWith("http") ? url : `https://${url}`;
+    const link = url.startsWith('http') ? url : `https://${url}`;
     Linking.canOpenURL(link)
       .then((supported) => {
         if (supported) Linking.openURL(link);
-        else Alert.alert("Cannot open URL", link);
+        else Alert.alert('Cannot open URL', link);
       })
-      .catch(() => Alert.alert("Cannot open URL", link));
+      .catch(() => Alert.alert('Cannot open URL', link));
   }
 
   async function copyToClipboard(text: string) {
     try {
       await Clipboard.setStringAsync(text);
-      if (Platform.OS === "android") {
-        ToastAndroid.show("Password copied to clipboard", ToastAndroid.SHORT);
+      if (Platform.OS === 'android') {
+        ToastAndroid.show('Password copied to clipboard', ToastAndroid.SHORT);
       } else {
-        Alert.alert("Copied", "Password copied to clipboard");
+        Alert.alert('Copied', 'Password copied to clipboard');
       }
     } catch (e: any) {
-      Alert.alert("Copy failed", e?.message ?? "Cannot access clipboard");
+      Alert.alert('Copy failed', e?.message ?? 'Cannot access clipboard');
     }
   }
 
@@ -108,19 +108,11 @@ export default function Details({ route, navigation }: any) {
         testID="vault-details-card"
       >
         <Text style={[styles.label, { color: theme.primary }]}>Title</Text>
-        <Text
-          style={[styles.value, { color: theme.text }]}
-          testID="vault-details-title-text"
-        >
+        <Text style={[styles.value, { color: theme.text }]} testID="vault-details-title-text">
           {name}
         </Text>
-        <Text style={[styles.label, { color: theme.primary }]}>
-          Username / Email
-        </Text>
-        <Text
-          style={[styles.value, { color: theme.text }]}
-          testID="vault-details-username-text"
-        >
+        <Text style={[styles.label, { color: theme.primary }]}>Username / Email</Text>
+        <Text style={[styles.value, { color: theme.text }]} testID="vault-details-username-text">
           {username}
         </Text>
         <Text style={[styles.label, { color: theme.primary }]}>Password</Text>
@@ -129,31 +121,20 @@ export default function Details({ route, navigation }: any) {
             style={[styles.value, { flex: 1, color: theme.text }]}
             testID="vault-details-password-text"
           >
-            {showPassword
-              ? password
-              : "\u2022".repeat(Math.max(8, password.length))}
+            {showPassword ? password : '\u2022'.repeat(Math.max(8, password.length))}
           </Text>
           <Pressable
             onPress={() => setShowPassword((s) => !s)}
             style={[styles.iconButton, { backgroundColor: theme.card }]}
             testID="vault-details-toggle-password-button"
-            accessibilityLabel={
-              showPassword ? "Hide password" : "Show password"
-            }
+            accessibilityLabel={showPassword ? 'Hide password' : 'Show password'}
             accessibilityRole="button"
           >
-            <Feather
-              name={showPassword ? "eye" : "eye-off"}
-              size={20}
-              color={theme.primary}
-            />
+            <Feather name={showPassword ? 'eye' : 'eye-off'} size={20} color={theme.primary} />
           </Pressable>
           <Pressable
             onPress={() => copyToClipboard(password)}
-            style={[
-              styles.iconButton,
-              { marginLeft: 8, backgroundColor: theme.card },
-            ]}
+            style={[styles.iconButton, { marginLeft: 8, backgroundColor: theme.card }]}
             testID="vault-details-copy-password-button"
             accessibilityLabel="Copy password to clipboard"
             accessibilityRole="button"
@@ -165,25 +146,23 @@ export default function Details({ route, navigation }: any) {
         <Pressable
           onPress={() => openWebsite(website)}
           testID="vault-details-website-link"
-          accessibilityLabel={`Open website ${website || "N/A"}`}
+          accessibilityLabel={`Open website ${website || 'N/A'}`}
           accessibilityRole="link"
         >
           <Text style={[styles.value, styles.link, { color: theme.primary }]}>
-            {website || "N/A"}
+            {website || 'N/A'}
           </Text>
         </Pressable>
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "flex-end",
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
             marginBottom: 5,
           }}
         >
           <TouchableOpacity
-            onPress={() =>
-              navigation?.navigate("EditVaultCard", { entryId: entry?.id })
-            }
+            onPress={() => navigation?.navigate('EditVaultCard', { entryId: entry?.id })}
             style={[styles.editButton, { backgroundColor: theme.primary }]}
             testID="vault-details-edit-button"
             accessibilityLabel="Edit entry"
@@ -193,7 +172,7 @@ export default function Details({ route, navigation }: any) {
             <Text
               style={{
                 color: theme.background,
-                fontWeight: "600",
+                fontWeight: '600',
                 marginLeft: 6,
               }}
             >
@@ -203,35 +182,29 @@ export default function Details({ route, navigation }: any) {
           <TouchableOpacity
             onPress={() =>
               Alert.alert(
-                "Delete Entry",
-                "Are you sure you want to delete this entry? This action cannot be undone.",
+                'Delete Entry',
+                'Are you sure you want to delete this entry? This action cannot be undone.',
                 [
-                  { text: "Cancel", style: "cancel" },
+                  { text: 'Cancel', style: 'cancel' },
                   {
-                    text: "Delete",
-                    style: "destructive",
+                    text: 'Delete',
+                    style: 'destructive',
                     onPress: async () => {
                       if (!entry) return;
                       const filtered = entries.filter((e) => e.id !== entry.id);
                       try {
-                        await AsyncStorage.setItem(
-                          "vault_entries",
-                          JSON.stringify(filtered)
-                        );
+                        await AsyncStorage.setItem('vault_entries', JSON.stringify(filtered));
                         setEntries(filtered);
-                        navigation?.navigate("Vault");
+                        navigation?.navigate('Vault');
                       } catch (e) {
-                        Alert.alert("Error", "Could not delete entry");
+                        Alert.alert('Error', 'Could not delete entry');
                       }
                     },
                   },
-                ]
+                ],
               )
             }
-            style={[
-              styles.editButton,
-              { backgroundColor: theme.error, marginLeft: 10 },
-            ]}
+            style={[styles.editButton, { backgroundColor: theme.error, marginLeft: 10 }]}
             testID="vault-details-delete-button"
             accessibilityLabel="Delete entry"
             accessibilityRole="button"
@@ -240,7 +213,7 @@ export default function Details({ route, navigation }: any) {
             <Text
               style={{
                 color: theme.background,
-                fontWeight: "600",
+                fontWeight: '600',
                 marginLeft: 6,
               }}
             >
@@ -258,8 +231,8 @@ const styles = StyleSheet.create({
   header: {
     marginTop: 40,
     paddingHorizontal: 16,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 8,
   },
   backButton: {
@@ -268,9 +241,9 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     flex: 1,
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: '700',
     marginRight: 40,
   },
   card: {
@@ -283,21 +256,21 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 2,
   },
-  label: { fontSize: 14, fontWeight: "700", marginTop: 12 },
+  label: { fontSize: 14, fontWeight: '700', marginTop: 12 },
   value: { fontSize: 16, marginTop: 6 },
-  row: { flexDirection: "row", alignItems: "center", marginTop: 6 },
+  row: { flexDirection: 'row', alignItems: 'center', marginTop: 6 },
   iconButton: { padding: 6, borderRadius: 6 },
   editButton: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderRadius: 10,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 3,
   },
-  link: { textDecorationLine: "underline" },
+  link: { textDecorationLine: 'underline' },
 });

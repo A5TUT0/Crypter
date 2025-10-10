@@ -1,5 +1,5 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';
 
 export type Entry = {
   id: string;
@@ -17,7 +17,7 @@ export function useVaultEntries() {
     let mounted = true;
     const load = async () => {
       try {
-        const raw = await AsyncStorage.getItem("vault_entries");
+        const raw = await AsyncStorage.getItem('vault_entries');
         if (!mounted) return;
         if (raw) {
           const parsed = JSON.parse(raw) as Entry[];
@@ -26,7 +26,7 @@ export function useVaultEntries() {
           setEntries([]);
         }
       } catch (e) {
-        console.error("Failed to load vault entries", e);
+        console.error('Failed to load vault entries', e);
         if (mounted) setEntries([]);
       }
     };

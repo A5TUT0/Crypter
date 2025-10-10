@@ -27,3 +27,7 @@ It stores user credentials locally using strong encryption and biometric authent
 ## 🚀 Summary
 
 Crypter keeps your passwords safe, private, and always under your control — no cloud, no subscriptions, no risks.
+
+$npmGlobal = "C:\Users\astuto\AppData\Roaming\npm"
+$env:Path = "$env:Path;$npmGlobal"
+eas --version

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,16 +11,16 @@ import {
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
-} from "react-native";
-import { useTheme } from "../contexts/ThemeContext";
-import Title from "../components/ui/Title";
-import { Input, InputPassword } from "../components/ui/Input";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { useVaultEntries, Entry } from "../hooks/AsyncStorage";
-import FaviconImage from "../components/FaviconImage";
-import { checkEmailBreach, validateRequiredFields } from "../utils/vaultUtils";
-import { usePasswordGenerator } from "../hooks/usePasswordGenerator";
+} from 'react-native';
+import { useTheme } from '../contexts/ThemeContext';
+import Title from '../components/ui/Title';
+import { Input, InputPassword } from '../components/ui/Input';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { useVaultEntries, Entry } from '../hooks/AsyncStorage';
+import FaviconImage from '../components/FaviconImage';
+import { checkEmailBreach, validateRequiredFields } from '../utils/vaultUtils';
+import { usePasswordGenerator } from '../hooks/usePasswordGenerator';
 
 export function EditVaultCard(props: any) {
   const { entryId } = props.route.params;
@@ -29,20 +29,20 @@ export function EditVaultCard(props: any) {
   const entry = entries.find((e: Entry) => e.id === entryId);
   const theme = useTheme();
 
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [website, setWebsite] = useState("");
+  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [website, setWebsite] = useState('');
   const [favorite, setFavorite] = useState(false);
 
   const { generatePassword } = usePasswordGenerator(setPassword);
 
   useEffect(() => {
     if (entry) {
-      setName(entry.name || "");
-      setUsername(entry.username || "");
-      setPassword(entry.password || "");
-      setWebsite(entry.website || "");
+      setName(entry.name || '');
+      setUsername(entry.username || '');
+      setPassword(entry.password || '');
+      setWebsite(entry.website || '');
       setFavorite(entry.favorite || false);
     }
   }, [entry]);
@@ -52,7 +52,7 @@ export function EditVaultCard(props: any) {
       return;
     }
     try {
-      const existing = await AsyncStorage.getItem("vault_entries");
+      const existing = await AsyncStorage.getItem('vault_entries');
       const arr = existing ? JSON.parse(existing) : [];
       const updatedEntry = {
         id: entryId,
@@ -65,15 +65,15 @@ export function EditVaultCard(props: any) {
       const index = arr.findIndex((e: Entry) => e.id === entryId);
       if (index !== -1) {
         arr[index] = updatedEntry;
-        await AsyncStorage.setItem("vault_entries", JSON.stringify(arr));
-        Alert.alert("Saved", "Vault entry updated successfully");
-        navigation.navigate("Vault");
+        await AsyncStorage.setItem('vault_entries', JSON.stringify(arr));
+        Alert.alert('Saved', 'Vault entry updated successfully');
+        navigation.navigate('Vault');
       } else {
-        Alert.alert("Error", "Entry not found");
+        Alert.alert('Error', 'Entry not found');
       }
     } catch (e) {
-      console.error("Error saving entry", e);
-      Alert.alert("Error", "Could not save entry");
+      console.error('Error saving entry', e);
+      Alert.alert('Error', 'Could not save entry');
     }
   }
 
@@ -82,8 +82,8 @@ export function EditVaultCard(props: any) {
       <View
         style={{
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
           backgroundColor: theme.background,
         }}
       >
@@ -95,8 +95,8 @@ export function EditVaultCard(props: any) {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: theme.background }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 80}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 80}
     >
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <ScrollView
@@ -111,10 +111,10 @@ export function EditVaultCard(props: any) {
           testID="edit-vault-scroll"
         >
           <View style={{ flex: 1 }}>
-            <View style={{ position: "relative", alignItems: "center" }}>
+            <View style={{ position: 'relative', alignItems: 'center' }}>
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
-                style={{ position: "absolute", left: 10, top: 0, zIndex: 10 }}
+                style={{ position: 'absolute', left: 10, top: 0, zIndex: 10 }}
                 testID="edit-vault-back-button"
                 accessibilityLabel="Go back"
                 accessibilityRole="button"
@@ -127,7 +127,7 @@ export function EditVaultCard(props: any) {
             {/* Preview del favicon actual */}
             {website && (
               <View
-                style={{ alignItems: "center", marginVertical: 20 }}
+                style={{ alignItems: 'center', marginVertical: 20 }}
                 testID="edit-vault-favicon-preview"
               >
                 <FaviconImage domain={website} size={80} borderRadius={20} />
@@ -160,7 +160,7 @@ export function EditVaultCard(props: any) {
               <Pressable
                 onPress={() => checkEmailBreach(username)}
                 style={{
-                  alignItems: "flex-end",
+                  alignItems: 'flex-end',
                   paddingRight: 20,
                   marginBottom: 10,
                 }}
@@ -168,7 +168,7 @@ export function EditVaultCard(props: any) {
                 accessibilityLabel="Check if email is pwned"
                 accessibilityRole="button"
               >
-                <Text style={{ color: theme.primary, fontWeight: "600" }}>
+                <Text style={{ color: theme.primary, fontWeight: '600' }}>
                   Check if email is pwned
                 </Text>
               </Pressable>
@@ -181,7 +181,7 @@ export function EditVaultCard(props: any) {
               <Pressable
                 onPress={generatePassword}
                 style={{
-                  alignItems: "flex-end",
+                  alignItems: 'flex-end',
                   paddingRight: 20,
                   marginBottom: 10,
                 }}
@@ -189,9 +189,7 @@ export function EditVaultCard(props: any) {
                 accessibilityLabel="Generate random password"
                 accessibilityRole="button"
               >
-                <Text style={{ color: theme.primary, fontWeight: "600" }}>
-                  Generate Password
-                </Text>
+                <Text style={{ color: theme.primary, fontWeight: '600' }}>Generate Password</Text>
               </Pressable>
               <Input
                 placeHolderText="Website"
@@ -212,26 +210,22 @@ export function EditVaultCard(props: any) {
               <Pressable
                 onPress={() => setFavorite(!favorite)}
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   padding: 20,
                 }}
                 testID="edit-vault-favorite-toggle"
-                accessibilityLabel={
-                  favorite ? "Unmark as favorite" : "Mark as favorite"
-                }
+                accessibilityLabel={favorite ? 'Unmark as favorite' : 'Mark as favorite'}
                 accessibilityRole="checkbox"
                 accessibilityState={{ checked: favorite }}
               >
                 <Ionicons
-                  name={favorite ? "star" : "star-outline"}
+                  name={favorite ? 'star' : 'star-outline'}
                   size={24}
                   color={favorite ? theme.primary : theme.text}
                 />
-                <Text
-                  style={{ marginLeft: 10, fontSize: 16, color: theme.text }}
-                >
-                  {favorite ? "Unmark Favorite" : "Mark as Favorite"}
+                <Text style={{ marginLeft: 10, fontSize: 16, color: theme.text }}>
+                  {favorite ? 'Unmark Favorite' : 'Mark as Favorite'}
                 </Text>
               </Pressable>
             </View>
@@ -246,9 +240,7 @@ export function EditVaultCard(props: any) {
                 accessibilityLabel="Save changes"
                 accessibilityRole="button"
               >
-                <Text style={{ ...styles.saveButtonText, color: theme.card }}>
-                  Save Changes
-                </Text>
+                <Text style={{ ...styles.saveButtonText, color: theme.card }}>Save Changes</Text>
               </Pressable>
             </View>
           </View>
@@ -263,9 +255,9 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 6,
@@ -275,7 +267,7 @@ const styles = StyleSheet.create({
     transform: [{ scale: 0.995 }],
   },
   saveButtonText: {
-    fontWeight: "700",
+    fontWeight: '700',
     fontSize: 16,
   },
 });

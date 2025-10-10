@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Image, View, StyleSheet } from "react-native";
-import { useTheme } from "../contexts/ThemeContext";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import React, { useState, useEffect } from 'react';
+import { Image, View, StyleSheet } from 'react-native';
+import { useTheme } from '../contexts/ThemeContext';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 interface FaviconImageProps {
   domain?: string;
@@ -9,21 +9,17 @@ interface FaviconImageProps {
   borderRadius?: number;
 }
 
-export default function FaviconImage({
-  domain,
-  size = 50,
-  borderRadius = 15,
-}: FaviconImageProps) {
+export default function FaviconImage({ domain, size = 50, borderRadius = 15 }: FaviconImageProps) {
   const theme = useTheme();
   const [currentUrlIndex, setCurrentUrlIndex] = useState(0);
   const [hasError, setHasError] = useState(false);
 
   const getFaviconUrls = (websiteDomain: string) => {
     const cleanDomain = websiteDomain
-      .replace(/^https?:\/\//, "")
-      .replace(/\/$/, "")
-      .split("/")[0];
-    console.log("FaviconImage - cleanDomain:", cleanDomain);
+      .replace(/^https?:\/\//, '')
+      .replace(/\/$/, '')
+      .split('/')[0];
+    console.log('FaviconImage - cleanDomain:', cleanDomain);
     return [
       `https://logo.clearbit.com/${cleanDomain}`,
       `https://icons.duckduckgo.com/ip3/${cleanDomain}.ico`,
@@ -54,15 +50,11 @@ export default function FaviconImage({
             width: size,
             height: size,
             borderRadius,
-            backgroundColor: theme.primary + "20",
+            backgroundColor: theme.primary + '20',
           },
         ]}
       >
-        <Ionicons
-          name="globe-outline"
-          size={size * 0.6}
-          color={theme.primary}
-        />
+        <Ionicons name="globe-outline" size={size * 0.6} color={theme.primary} />
       </View>
     );
   }
@@ -99,13 +91,13 @@ export default function FaviconImage({
 
 const styles = StyleSheet.create({
   imageContainer: {
-    overflow: "hidden",
-    alignItems: "center",
-    justifyContent: "center",
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   defaultIconContainer: {
-    overflow: "hidden",
-    alignItems: "center",
-    justifyContent: "center",
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

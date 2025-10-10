@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Accelerometer } from "expo-sensors";
-import { View, Text } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { Accelerometer } from 'expo-sensors';
+import { View, Text } from 'react-native';
 
 export default function ShakeDetector() {
   const [data, setData] = useState({});

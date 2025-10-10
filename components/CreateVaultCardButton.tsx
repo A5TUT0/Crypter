@@ -1,6 +1,6 @@
-import { GestureResponderEvent, Pressable, View } from "react-native";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import { useTheme } from "../contexts/ThemeContext";
+import { GestureResponderEvent, Pressable, View } from 'react-native';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { useTheme } from '../contexts/ThemeContext';
 
 export default function CreateVaultCardButton({
   onPress,
@@ -17,7 +17,7 @@ export default function CreateVaultCardButton({
             backgroundColor: pressed ? theme.primary : theme.primary,
             borderRadius: 50,
             padding: 15,
-            position: "absolute",
+            position: 'absolute',
             bottom: 80,
             right: 20,
             shadowColor: theme.text,

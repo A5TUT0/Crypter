@@ -10,24 +10,24 @@ import {
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
-} from "react-native";
-import { useTheme } from "../contexts/ThemeContext";
-import Title from "../components/ui/Title";
-import { Input, InputPassword } from "../components/ui/Input";
-import { useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { checkEmailBreach, validateRequiredFields } from "../utils/vaultUtils";
-import { usePasswordGenerator } from "../hooks/usePasswordGenerator";
+} from 'react-native';
+import { useTheme } from '../contexts/ThemeContext';
+import Title from '../components/ui/Title';
+import { Input, InputPassword } from '../components/ui/Input';
+import { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { checkEmailBreach, validateRequiredFields } from '../utils/vaultUtils';
+import { usePasswordGenerator } from '../hooks/usePasswordGenerator';
 
 export default function CreateVaultCard(props: any) {
   const { navigation } = props;
   const theme = useTheme();
 
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [website, setWebsite] = useState("");
+  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [website, setWebsite] = useState('');
   const [favorite, setFavorite] = useState(false);
 
   const { generatePassword } = usePasswordGenerator(setPassword);
@@ -37,7 +37,7 @@ export default function CreateVaultCard(props: any) {
       return;
     }
     try {
-      const existing = await AsyncStorage.getItem("vault_entries");
+      const existing = await AsyncStorage.getItem('vault_entries');
       const arr = existing ? JSON.parse(existing) : [];
       const newEntry = {
         id: Date.now().toString(),
@@ -48,24 +48,24 @@ export default function CreateVaultCard(props: any) {
         favorite,
       };
       arr.push(newEntry);
-      await AsyncStorage.setItem("vault_entries", JSON.stringify(arr));
-      Alert.alert("Saved", "Vault entry saved successfully");
-      setName("");
-      setUsername("");
-      setPassword("");
-      setWebsite("");
-      navigation.navigate("Vault");
+      await AsyncStorage.setItem('vault_entries', JSON.stringify(arr));
+      Alert.alert('Saved', 'Vault entry saved successfully');
+      setName('');
+      setUsername('');
+      setPassword('');
+      setWebsite('');
+      navigation.navigate('Vault');
     } catch (e) {
-      console.error("Error saving entry", e);
-      Alert.alert("Error", "Could not save entry");
+      console.error('Error saving entry', e);
+      Alert.alert('Error', 'Could not save entry');
     }
   }
 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: theme.background }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 80}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 80}
     >
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <ScrollView
@@ -80,10 +80,10 @@ export default function CreateVaultCard(props: any) {
           testID="create-vault-scroll"
         >
           <View style={{ flex: 1 }}>
-            <View style={{ position: "relative", alignItems: "center" }}>
+            <View style={{ position: 'relative', alignItems: 'center' }}>
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
-                style={{ position: "absolute", left: 10, top: 0, zIndex: 10 }}
+                style={{ position: 'absolute', left: 10, top: 0, zIndex: 10 }}
                 testID="create-vault-back-button"
                 accessibilityLabel="Go back"
                 accessibilityRole="button"
@@ -108,7 +108,7 @@ export default function CreateVaultCard(props: any) {
               <Pressable
                 onPress={() => checkEmailBreach(username)}
                 style={{
-                  alignItems: "flex-end",
+                  alignItems: 'flex-end',
                   paddingRight: 20,
                   marginBottom: 10,
                 }}
@@ -116,7 +116,7 @@ export default function CreateVaultCard(props: any) {
                 accessibilityLabel="Check if email is pwned"
                 accessibilityRole="button"
               >
-                <Text style={{ color: theme.primary, fontWeight: "600" }}>
+                <Text style={{ color: theme.primary, fontWeight: '600' }}>
                   Check if email is pwned
                 </Text>
               </Pressable>
@@ -129,7 +129,7 @@ export default function CreateVaultCard(props: any) {
               <Pressable
                 onPress={generatePassword}
                 style={{
-                  alignItems: "flex-end",
+                  alignItems: 'flex-end',
                   paddingRight: 20,
                   marginBottom: 10,
                 }}
@@ -137,9 +137,7 @@ export default function CreateVaultCard(props: any) {
                 accessibilityLabel="Generate random password"
                 accessibilityRole="button"
               >
-                <Text style={{ color: theme.primary, fontWeight: "600" }}>
-                  Generate Password
-                </Text>
+                <Text style={{ color: theme.primary, fontWeight: '600' }}>Generate Password</Text>
               </Pressable>
               <Input
                 placeHolderText="Website"
@@ -160,26 +158,22 @@ export default function CreateVaultCard(props: any) {
               <Pressable
                 onPress={() => setFavorite(!favorite)}
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   padding: 20,
                 }}
                 testID="create-vault-favorite-toggle"
-                accessibilityLabel={
-                  favorite ? "Unmark as favorite" : "Mark as favorite"
-                }
+                accessibilityLabel={favorite ? 'Unmark as favorite' : 'Mark as favorite'}
                 accessibilityRole="checkbox"
                 accessibilityState={{ checked: favorite }}
               >
                 <Ionicons
-                  name={favorite ? "star" : "star-outline"}
+                  name={favorite ? 'star' : 'star-outline'}
                   size={24}
                   color={favorite ? theme.primary : theme.text}
                 />
-                <Text
-                  style={{ marginLeft: 10, fontSize: 16, color: theme.text }}
-                >
-                  {favorite ? "Unmark Favorite" : "Mark as Favorite"}
+                <Text style={{ marginLeft: 10, fontSize: 16, color: theme.text }}>
+                  {favorite ? 'Unmark Favorite' : 'Mark as Favorite'}
                 </Text>
               </Pressable>
             </View>
@@ -194,9 +188,7 @@ export default function CreateVaultCard(props: any) {
                 accessibilityLabel="Create vault entry"
                 accessibilityRole="button"
               >
-                <Text style={{ ...styles.createButtonText, color: theme.card }}>
-                  Create
-                </Text>
+                <Text style={{ ...styles.createButtonText, color: theme.card }}>Create</Text>
               </Pressable>
             </View>
           </View>
@@ -211,9 +203,9 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 6,
@@ -223,7 +215,7 @@ const styles = StyleSheet.create({
     transform: [{ scale: 0.995 }],
   },
   createButtonText: {
-    fontWeight: "700",
+    fontWeight: '700',
     fontSize: 16,
   },
 });

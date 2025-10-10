@@ -1,5 +1,5 @@
-import { TextInput, View } from "react-native";
-import { useTheme } from "../contexts/ThemeContext";
+import { TextInput, View } from 'react-native';
+import { useTheme } from '../contexts/ThemeContext';
 
 export default function SearchBar({
   onChangeText,
@@ -21,7 +21,7 @@ export default function SearchBar({
     >
       <TextInput
         placeholder="Search vaults..."
-        placeholderTextColor={theme.text + "99"}
+        placeholderTextColor={theme.text + '99'}
         style={{ color: theme.text, fontSize: 16 }}
         onChangeText={onChangeText}
         value={value}
