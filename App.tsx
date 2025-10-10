@@ -1,5 +1,6 @@
-import { View } from 'react-native';
+import React from 'react';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { ToastProvider } from './contexts/ToastContext';
 import Vault from './screens/Vault';
 import CreateVaultCard from './screens/CreateVaultCard';
 import NavBar from './components/NavBar';
@@ -16,22 +17,24 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <ThemeProvider>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <SafeAreaView style={{ flex: 1 }}>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="Favorites" component={Favorites} />
-              <Stack.Screen name="Vault" component={Vault} />
-              <Stack.Screen name="CreateVault" component={CreateVaultCard} />
-              <Stack.Screen name="VaultCardDetails" component={Details} />
-              <Stack.Screen name="Settings" component={Settings} />
-              <Stack.Screen name="EditVaultCard" component={EditVaultCard} />
-            </Stack.Navigator>
+      <ToastProvider>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <SafeAreaView style={{ flex: 1 }}>
+              <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="Favorites" component={Favorites} />
+                <Stack.Screen name="Vault" component={Vault} />
+                <Stack.Screen name="CreateVault" component={CreateVaultCard} />
+                <Stack.Screen name="VaultCardDetails" component={Details} />
+                <Stack.Screen name="Settings" component={Settings} />
+                <Stack.Screen name="EditVaultCard" component={EditVaultCard} />
+              </Stack.Navigator>
 
-            <NavBar />
-          </SafeAreaView>
-        </NavigationContainer>
-      </SafeAreaProvider>
+              <NavBar />
+            </SafeAreaView>
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </ToastProvider>
     </ThemeProvider>
   );
 }

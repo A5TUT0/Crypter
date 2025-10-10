@@ -1,21 +1,11 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Linking,
-  Alert,
-  Pressable,
-  Platform,
-} from 'react-native';
-import { ToastAndroid } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Linking, Alert, Pressable } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { useTheme } from '../contexts/ThemeContext';
-import React, { useEffect, useState } from 'react';
+import { useToast } from '../contexts/ToastContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import FaviconImage from '../components/FaviconImage';
 
 type Entry = {
   id: string;
@@ -29,6 +19,7 @@ export default function Details({ route, navigation }: any) {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [showPassword, setShowPassword] = useState(false);
   const theme = useTheme();
+  const { showToast } = useToast();
 
   useEffect(() => {
     const load = async () => {
@@ -60,21 +51,17 @@ export default function Details({ route, navigation }: any) {
     Linking.canOpenURL(link)
       .then((supported) => {
         if (supported) Linking.openURL(link);
-        else Alert.alert('Cannot open URL', link);
+        else showToast('Cannot open URL', 'error');
       })
-      .catch(() => Alert.alert('Cannot open URL', link));
+      .catch(() => showToast('Cannot open URL', 'error'));
   }
 
   async function copyToClipboard(text: string) {
     try {
       await Clipboard.setStringAsync(text);
-      if (Platform.OS === 'android') {
-        ToastAndroid.show('Password copied to clipboard', ToastAndroid.SHORT);
-      } else {
-        Alert.alert('Copied', 'Password copied to clipboard');
-      }
+      showToast('Password copied to clipboard', 'success');
     } catch (e: any) {
-      Alert.alert('Copy failed', e?.message ?? 'Cannot access clipboard');
+      showToast(e?.message ?? 'Cannot access clipboard', 'error');
     }
   }
 
@@ -196,8 +183,9 @@ export default function Details({ route, navigation }: any) {
                         await AsyncStorage.setItem('vault_entries', JSON.stringify(filtered));
                         setEntries(filtered);
                         navigation?.navigate('Vault');
-                      } catch (e) {
-                        Alert.alert('Error', 'Could not delete entry');
+                        showToast('Entry deleted successfully', 'success');
+                      } catch {
+                        showToast('Could not delete entry', 'error');
                       }
                     },
                   },

@@ -1,6 +1,6 @@
+import React, { useState } from 'react';
 import {
   View,
-  Alert,
   Pressable,
   Text,
   StyleSheet,
@@ -12,9 +12,9 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { useTheme } from '../contexts/ThemeContext';
+import { useToast } from '../contexts/ToastContext';
 import Title from '../components/ui/Title';
 import { Input, InputPassword } from '../components/ui/Input';
-import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { checkEmailBreach, validateRequiredFields } from '../utils/vaultUtils';
@@ -23,6 +23,7 @@ import { usePasswordGenerator } from '../hooks/usePasswordGenerator';
 export default function CreateVaultCard(props: any) {
   const { navigation } = props;
   const theme = useTheme();
+  const { showToast } = useToast();
 
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
@@ -49,7 +50,7 @@ export default function CreateVaultCard(props: any) {
       };
       arr.push(newEntry);
       await AsyncStorage.setItem('vault_entries', JSON.stringify(arr));
-      Alert.alert('Saved', 'Vault entry saved successfully');
+      showToast('Vault entry saved successfully', 'success');
       setName('');
       setUsername('');
       setPassword('');
@@ -57,7 +58,7 @@ export default function CreateVaultCard(props: any) {
       navigation.navigate('Vault');
     } catch (e) {
       console.error('Error saving entry', e);
-      Alert.alert('Error', 'Could not save entry');
+      showToast('Could not save entry', 'error');
     }
   }
 

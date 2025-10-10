@@ -6,13 +6,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Alert,
   KeyboardAvoidingView,
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
 import { useTheme } from '../contexts/ThemeContext';
+import { useToast } from '../contexts/ToastContext';
 import Title from '../components/ui/Title';
 import { Input, InputPassword } from '../components/ui/Input';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -28,6 +28,7 @@ export function EditVaultCard(props: any) {
   const entries = useVaultEntries();
   const entry = entries.find((e: Entry) => e.id === entryId);
   const theme = useTheme();
+  const { showToast } = useToast();
 
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
@@ -66,14 +67,14 @@ export function EditVaultCard(props: any) {
       if (index !== -1) {
         arr[index] = updatedEntry;
         await AsyncStorage.setItem('vault_entries', JSON.stringify(arr));
-        Alert.alert('Saved', 'Vault entry updated successfully');
+        showToast('Vault entry updated successfully', 'success');
         navigation.navigate('Vault');
       } else {
-        Alert.alert('Error', 'Entry not found');
+        showToast('Entry not found', 'error');
       }
     } catch (e) {
       console.error('Error saving entry', e);
-      Alert.alert('Error', 'Could not save entry');
+      showToast('Could not save entry', 'error');
     }
   }
 
