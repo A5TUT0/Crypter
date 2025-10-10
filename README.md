@@ -1,7 +1,7 @@
 # 🔐 Crypter
 
-Crypter is a secure, offline password manager built with **React Native**.  
-It stores user credentials locally using strong encryption and biometric authentication, ensuring full privacy without relying on external servers.
+Crypter is an offline password manager built with **React Native**.  
+It stores user credentials locally in plain text and can use biometric authentication; all data stays on your device and is not uploaded to external servers.
 
 ## ✨ Features
 
