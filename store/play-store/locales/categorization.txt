@@ -1,0 +1,7 @@
+Category: Productivity
+Subcategory: Password Manager (Local / Offline, Demo)
+Primary purpose: Store and retrieve login credentials locally on device
+Monetization: Free; No ads; No in-app purchases
+Targets kids: No (Not directed to children)
+Devices: Phone (primary). Tablets not explicitly optimized.
+User-to-user interaction: No (no sharing features)

@@ -1,0 +1,20 @@
+{
+  "data_collected_by_developer": [],
+  "data_shared_with_third_parties": [
+    {
+      "category": "Personal info",
+      "type": "Email address",
+      "purpose": ["App functionality"],
+      "optional": true,
+      "user_initiated": true,
+      "third_party": "XposedOrNot (breach check API)",
+      "retention": "Not retained by developer"
+    }
+  ],
+  "security_practices": {
+    "data_encrypted_in_transit": true,
+    "data_encrypted_at_rest": false,
+    "user_request_deletion_supported": true
+  },
+  "explanation": "Crypter (Demo) stores entries locally in plaintext (AsyncStorage). The breach check sends the provided email to a third-party API over HTTPS only when explicitly triggered by the user. Clear Data is available in Settings."
+}

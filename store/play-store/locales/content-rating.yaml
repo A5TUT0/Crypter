@@ -1,0 +1,13 @@
+# Internal reference for Play Console content rating answers (IARC-like cues).
+
+violence: none
+sexual_content: none
+nudity: none
+language: none
+alcohol_tobacco_drugs: none
+gambling: none
+hate_speech: none
+terrorism: none
+user_interaction: false
+digital_purchases: false
+location_access: false

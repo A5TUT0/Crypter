@@ -1,0 +1,4 @@
+Developer name: Noah Lezama
+Support email: noah.dev.apps@gmail.com
+Website: https://crypter.luan.world/
+Privacy policy: privacy-policy.md
