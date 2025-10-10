@@ -7,22 +7,37 @@ import Fontisto from '@expo/vector-icons/Fontisto';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+/**
+ * Custom hook to calculate responsive icon and font sizes
+ * Based on screen width, with min/max constraints
+ * @returns Object with icon and font sizes
+ */
 const useSizes = () => {
   const { width } = Dimensions.get('window');
+  // Icon size: 8% of screen width, but between 24-34px
   const icon = Math.min(Math.max(Math.round(width * 0.08), 24), 34);
   return { icon, font: 11 };
 };
 
+/**
+ * NavBar Component
+ * Bottom navigation bar with 3 tabs: Vaults, Favorites, Settings
+ * Highlights the currently active tab
+ * Handles safe area insets for devices with notches/home indicators
+ */
 export default function NavBar() {
   const navigation: any = useNavigation();
-  const [selected, setSelected] = useState<string>('Favorites');
+  const [selected, setSelected] = useState<string>('Favorites'); // Track selected tab
   const theme = useTheme();
-  const { bottom } = useSafeAreaInsets();
-  const { icon, font } = useSizes();
+  const { bottom } = useSafeAreaInsets(); // Get bottom safe area (for home indicator)
+  const { icon, font } = useSizes(); // Calculate responsive sizes
 
+  // Colors for active/inactive states
   const activeColor = theme.primary;
   const inactiveColor = theme.text;
 
+  // Define navigation tabs configuration
+  // useMemo prevents recreation on every render
   const tabs = useMemo(
     () => [
       { key: 'Vault', label: 'Vaults', Icon: Entypo, iconName: 'lock' },

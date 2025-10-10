@@ -3,16 +3,23 @@ import { Text, StyleSheet, Animated, Pressable } from 'react-native';
 import { useTheme } from '../contexts/ThemeContext';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+// Define the types of toast notifications available
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
 
+// Props interface for the Toast component
 interface ToastProps {
-  visible: boolean;
-  message: string;
-  type?: ToastType;
-  duration?: number;
-  onHide: () => void;
+  visible: boolean; // Controls whether the toast is shown or hidden
+  message: string; // The text message to display
+  type?: ToastType; // Type of toast (determines color and icon)
+  duration?: number; // How long to show the toast in milliseconds
+  onHide: () => void; // Callback function when toast is hidden
 }
 
+/**
+ * Toast Component
+ * Displays animated notification messages at the top of the screen
+ * Automatically hides after a specified duration
+ */
 export default function Toast({
   visible,
   message,
@@ -21,70 +28,87 @@ export default function Toast({
   onHide,
 }: ToastProps) {
   const theme = useTheme();
-  const translateY = React.useRef(new Animated.Value(-100)).current;
-  const opacity = React.useRef(new Animated.Value(0)).current;
 
+  // Animated values for smooth slide-in/slide-out animation
+  const translateY = React.useRef(new Animated.Value(-100)).current; // Start position (off-screen)
+  const opacity = React.useRef(new Animated.Value(0)).current; // Start fully transparent
+
+  // Effect hook to handle showing and auto-hiding the toast
   useEffect(() => {
     if (visible) {
-      // Mostrar toast
+      // Animate toast sliding down from top and fading in
       Animated.parallel([
         Animated.timing(translateY, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
+          toValue: 0, // Final position (visible on screen)
+          duration: 300, // Animation duration in milliseconds
+          useNativeDriver: true, // Use native driver for better performance
         }),
         Animated.timing(opacity, {
-          toValue: 1,
+          toValue: 1, // Fully opaque
           duration: 300,
           useNativeDriver: true,
         }),
       ]).start();
 
-      // Auto-hide después del duration
+      // Set timer to automatically hide toast after specified duration
       const timer = setTimeout(() => {
         hideToast();
       }, duration);
 
+      // Cleanup: clear timer when component unmounts or dependencies change
       return () => clearTimeout(timer);
     }
   }, [visible, duration]);
 
+  /**
+   * Function to hide the toast with animation
+   * Slides up and fades out before calling onHide callback
+   */
   const hideToast = () => {
     Animated.parallel([
       Animated.timing(translateY, {
-        toValue: -100,
+        toValue: -100, // Move back off-screen
         duration: 300,
         useNativeDriver: true,
       }),
       Animated.timing(opacity, {
-        toValue: 0,
+        toValue: 0, // Fade out completely
         duration: 300,
         useNativeDriver: true,
       }),
     ]).start(() => {
-      onHide();
+      onHide(); // Call the onHide callback when animation completes
     });
   };
 
+  // Don't render anything if toast is not visible
   if (!visible) {
     return null;
   }
 
+  /**
+   * Get the background color based on toast type
+   * @returns Hex color string for the toast background
+   */
   const getToastColor = () => {
     switch (type) {
       case 'success':
-        return '#4CAF50';
+        return '#4CAF50'; // Green for success
       case 'error':
-        return '#F44336';
+        return '#F44336'; // Red for errors
       case 'warning':
-        return '#FF9800';
+        return '#FF9800'; // Orange for warnings
       case 'info':
-        return theme.primary;
+        return theme.primary; // Use theme color for info
       default:
         return theme.primary;
     }
   };
 
+  /**
+   * Get the appropriate icon name based on toast type
+   * @returns Ionicons icon name
+   */
   const getIcon = () => {
     switch (type) {
       case 'success':

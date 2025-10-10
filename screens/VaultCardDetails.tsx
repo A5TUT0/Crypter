@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
+// Type definition for vault entry
 type Entry = {
   id: string;
   name: string;
@@ -15,12 +16,24 @@ type Entry = {
   website?: string;
 };
 
+/**
+ * VaultCardDetails Screen
+ * Displays detailed information about a vault entry
+ * Features:
+ * - View entry details (title, username, password, website)
+ * - Toggle password visibility
+ * - Copy password to clipboard
+ * - Open associated website
+ * - Edit entry
+ * - Delete entry with confirmation
+ */
 export default function Details({ route, navigation }: any) {
-  const [entries, setEntries] = useState<Entry[]>([]);
-  const [showPassword, setShowPassword] = useState(false);
+  const [entries, setEntries] = useState<Entry[]>([]); // All vault entries
+  const [showPassword, setShowPassword] = useState(false); // Password visibility state
   const theme = useTheme();
   const { showToast } = useToast();
 
+  // Load vault entries from AsyncStorage on mount
   useEffect(() => {
     const load = async () => {
       try {
@@ -38,16 +51,28 @@ export default function Details({ route, navigation }: any) {
     };
     load();
   }, []);
+
+  // Find the specific entry by ID from route params
   const entry = entries.find((e) => e.id === route.params.entryId);
-  // Defensive: if entry not found, show fallback values
+
+  // Extract entry fields with fallback values if entry not found
   const name = entry ? entry.name : 'N/A';
   const username = entry ? entry.username : 'N/A';
   const password = entry ? entry.password : '';
   const website = entry ? entry.website : '';
 
+  /**
+   * Opens the associated website URL in the browser
+   * Adds https:// prefix if not present
+   * @param url - The website URL to open
+   */
   function openWebsite(url?: string) {
     if (!url) return;
+
+    // Ensure URL has protocol prefix
     const link = url.startsWith('http') ? url : `https://${url}`;
+
+    // Check if URL can be opened and open it
     Linking.canOpenURL(link)
       .then((supported) => {
         if (supported) Linking.openURL(link);
@@ -56,6 +81,11 @@ export default function Details({ route, navigation }: any) {
       .catch(() => showToast('Cannot open URL', 'error'));
   }
 
+  /**
+   * Copies text to the device clipboard
+   * Shows success/error toast based on result
+   * @param text - The text to copy
+   */
   async function copyToClipboard(text: string) {
     try {
       await Clipboard.setStringAsync(text);

@@ -20,41 +20,69 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { checkEmailBreach, validateRequiredFields } from '../utils/vaultUtils';
 import { usePasswordGenerator } from '../hooks/usePasswordGenerator';
 
+/**
+ * CreateVaultCard Screen
+ * Allows users to create a new password vault entry
+ * Features:
+ * - Form validation for required fields
+ * - Random password generation (manual or shake to generate)
+ * - Email breach checking
+ * - Favorite marking
+ * - Keyboard handling to prevent content obscuring
+ */
 export default function CreateVaultCard(props: any) {
   const { navigation } = props;
   const theme = useTheme();
   const { showToast } = useToast();
 
-  const [name, setName] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [website, setWebsite] = useState('');
-  const [favorite, setFavorite] = useState(false);
+  // Form state for all input fields
+  const [name, setName] = useState(''); // Entry title/name
+  const [username, setUsername] = useState(''); // Username or email
+  const [password, setPassword] = useState(''); // Password
+  const [website, setWebsite] = useState(''); // Website URL (optional)
+  const [favorite, setFavorite] = useState(false); // Is this a favorite entry?
 
+  // Hook for password generation (supports shake to generate)
   const { generatePassword } = usePasswordGenerator(setPassword);
 
+  /**
+   * Saves the vault entry to AsyncStorage
+   * Validates required fields before saving
+   * Shows success/error toast based on result
+   */
   async function saveEntry() {
+    // Validate that required fields are filled
     if (!validateRequiredFields(name, username, password)) {
       return;
     }
+
     try {
+      // Load existing entries from storage
       const existing = await AsyncStorage.getItem('vault_entries');
       const arr = existing ? JSON.parse(existing) : [];
+
+      // Create new entry object with unique ID
       const newEntry = {
-        id: Date.now().toString(),
+        id: Date.now().toString(), // Use timestamp as unique ID
         name,
         username,
         password,
         website,
         favorite,
       };
+
+      // Add new entry to array and save
       arr.push(newEntry);
       await AsyncStorage.setItem('vault_entries', JSON.stringify(arr));
+
+      // Show success message and reset form
       showToast('Vault entry saved successfully', 'success');
       setName('');
       setUsername('');
       setPassword('');
       setWebsite('');
+
+      // Navigate back to vault screen
       navigation.navigate('Vault');
     } catch (e) {
       console.error('Error saving entry', e);
@@ -63,11 +91,13 @@ export default function CreateVaultCard(props: any) {
   }
 
   return (
+    // KeyboardAvoidingView prevents keyboard from covering inputs
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: theme.background }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // Different behavior per platform
       keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 80}
     >
+      {/* TouchableWithoutFeedback allows tapping outside inputs to dismiss keyboard */}
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <ScrollView
           style={{ flex: 1 }}
@@ -77,10 +107,11 @@ export default function CreateVaultCard(props: any) {
             paddingBottom: 100,
             backgroundColor: theme.background,
           }}
-          keyboardShouldPersistTaps="handled"
+          keyboardShouldPersistTaps="handled" // Allow tapping buttons while keyboard is open
           testID="create-vault-scroll"
         >
           <View style={{ flex: 1 }}>
+            {/* Header with back button and title */}
             <View style={{ position: 'relative', alignItems: 'center' }}>
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
@@ -93,6 +124,8 @@ export default function CreateVaultCard(props: any) {
               </TouchableOpacity>
               <Title title="Create Login" />
             </View>
+
+            {/* Form inputs */}
             <View>
               <Input
                 placeHolderText="Title*"

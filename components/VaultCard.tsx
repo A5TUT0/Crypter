@@ -1,10 +1,16 @@
+import React, { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useTheme } from '../contexts/ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react';
 import FaviconImage from './FaviconImage';
 
+/**
+ * VaultCard Component
+ * Displays a vault entry in the list view
+ * Supports two display modes: normal and compact
+ * Shows website favicon, title, username, and favorite star
+ */
 export function VaultCard({
   id,
   title,
@@ -12,19 +18,21 @@ export function VaultCard({
   website,
   onPress,
 }: {
-  id?: string;
-  title: string;
-  user: string;
-  website?: string;
-  onPress?: () => void;
+  id?: string; // Unique entry ID
+  title: string; // Entry title/name
+  user: string; // Username or email
+  website?: string; // Website URL (for favicon)
+  onPress?: () => void; // Callback when card is pressed
 }) {
+  // Check user preference for compact list display
   const [isCompactList, setIsCompactList] = useState(false);
 
+  // Load compact list setting from storage
   useEffect(() => {
     const fetchCompactListSetting = async () => {
       try {
         const compact = await AsyncStorage.getItem('settings_compactList');
-        setIsCompactList(compact === '1');
+        setIsCompactList(compact === '1'); // '1' = compact mode enabled
       } catch {}
     };
     fetchCompactListSetting();
@@ -34,17 +42,19 @@ export function VaultCard({
 
   return (
     <View testID={`vault-card-${id || title}`}>
+      {/* Add spacing between cards in normal mode */}
       {isCompactList ? null : <View style={{ height: 10 }} />}
 
       <Pressable
         onPress={onPress}
-        style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1 }]}
-        hitSlop={8}
+        style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1 }]} // Visual feedback on press
+        hitSlop={8} // Increase touchable area
         testID={`vault-card-pressable-${id || title}`}
         accessibilityLabel={`${title}, ${user}`}
         accessibilityRole="button"
         accessibilityHint="Tap to view vault entry details"
       >
+        {/* Compact list layout - single row */}
         {isCompactList ? (
           <View
             style={{
